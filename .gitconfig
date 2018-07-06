@@ -1,0 +1,15 @@
+[user]
+	email = carvell.scott@gmail.com
+	name = Carvell Scott
+[core]
+	editor = vim
+[alias]
+    co = "!vim ~/.gitconfig"
+    df = "!f() { git difftool -d $1^ $1 ; } ; f"
+    hooked = "!cp ~/dotfiles/githooks/* ./.git/hooks"
+    l = log --graph --oneline --decorate
+    ppp = "!$SCRIPTS/git_ppp.py"
+    pytags = "!ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./"
+    s = status -suno
+    smc = "$SCRIPTS/git_smart_commit"
+    #TODO: A git hook that calls make <something> if code changes that is supposed to update something
