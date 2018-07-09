@@ -1,7 +1,7 @@
 #!/bin/bash
 
-sudo apt install python3
-sudo apt install git
+# sudo apt install python3
+# sudo apt install git
 sudo apt install tmux
 
 # curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
@@ -15,13 +15,13 @@ fi
 if test -d $HOME; then
     echo "This should run in WSL"
     # You know, I should probably use that option for ln that's all "make it anyway"
-    # rm ~/.bash_aliases ~/.gitconfig ~/.profile ~/.tmux.conf ~/.vimrc
-    # Link my "custom scripts" folder to /home/$USER/bin to call them wherever.
+    # I should probably just iterate through a list of filenames here too.
     ln -s -T "$HOME/dotfiles/.profile" ~/.profile
     ln -s -T "$HOME/dotfiles/.bash_aliases" ~/.bash_aliases
     ln -s -T "$HOME/dotfiles/.gitconfig" ~/.gitconfig
     ln -s -T "$HOME/dotfiles/.tmux.conf" ~/.tmux.conf
     ln -s -T "$HOME/dotfiles/.vimrc" ~/.vimrc
+    ln -s -T "$HOME/dotfiles/.dircolors" ~/.dircolors
 else
     echo "This should run in a VM or native linux"
     # Copy actual dotfiles

@@ -76,3 +76,4 @@ map <ScrollWheelUp> :redo<CR>
 "set t_ut=
 "colorscheme molokai
 colorscheme darkblue
+set background=dark
