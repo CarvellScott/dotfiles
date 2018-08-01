@@ -27,7 +27,7 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 #----------CUSTOM STUFF STARTS HERE (this line included)----------
 export BROWSER='/mnt/c/Program Files/Mozilla Firefox/firefox.exe'
-SCRIPTS=/mnt/c/Users/Muhznit/gitrepos
+SCRIPTS=/mnt/c/Users/Carvell/gitrepos
 
 if test "${PS1+set}"; then
     CDPATH=.:~:..:$SCRIPTS
@@ -83,4 +83,7 @@ wd() {
     cd "$1"
 }
 
+v() {
+    source ~/virtualenvs/$1/bin/activate
+}
 complete -F _wd wd

@@ -53,18 +53,18 @@ set pastetoggle=<F2>
 set clipboard=unnamed
 nnoremap <F3> :set invnumber<Enter><F2>
 " Run the file in python's interactive mode, importing it as a module
-nnoremap <F4> :!cd $(dirname "%:p"); python3.5 -i -c 'from %:t:r import *'<Enter>
+nnoremap <F4> :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
 " Run the file, assuming it's executable.
-nnoremap <F5> :!cd $(dirname "%:p"); python -m %:t:r<Enter>
+" nnoremap <F5> :!cd $(dirname "%:p"); python3 -m %:t:r<Enter>
 " Use this version for ANY executable:
-" nnoremap <F5> :!cd $(dirname "%:p");"%:p"<Enter>
+nnoremap <F5> :!cd $(dirname "%:p");"%:p"<Enter>
 " Run the file assuming it's a bunch of unittests
-nnoremap <F6> :!python3.5 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter><Enter>
+nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter><Enter>
 nnoremap <F7> :make
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");flake8 $(basename "%:p")<Enter>
-nnoremap <F9> :!pytest %:p<Enter>
-nnoremap <F10> :!cd $(dirname "%:p"); python3.5 -c 'import %:t:r; help(%:t:r)'<Enter><Enter>
+nnoremap <F9> :%!python3 -m json.tool
+nnoremap <F10> :!cd $(dirname "%:p"); python3 -c 'import %:t:r; help(%:t:r)'<Enter><Enter>
 nnoremap <C-l> $
 nnoremap <C-h> ^
 
@@ -77,3 +77,4 @@ map <ScrollWheelUp> :redo<CR>
 "colorscheme molokai
 colorscheme darkblue
 set background=dark
+set visualbell

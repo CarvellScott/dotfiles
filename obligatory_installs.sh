@@ -2,7 +2,7 @@
 
 # sudo apt install python3
 # sudo apt install git
-sudo apt install tmux
+# sudo apt install tmux
 
 # curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
 # sudo python3 -m get-pip
