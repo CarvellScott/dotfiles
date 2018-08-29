@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Re-index ctags after each commit so we can navigate better.
+ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./

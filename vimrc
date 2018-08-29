@@ -14,6 +14,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'ervandew/supertab'
+Plugin 'calviken/vim-gdscript3'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -49,8 +50,18 @@ set hlsearch
 set tags=./tags;
 set number " show line numbers in vim
 set pastetoggle=<F2>
+
+let python_highlight_all=1
+syntax on
+au BufNewFile,BufRead *.py set tabstop=4
+au BufNewFile,BufRead *.py set softtabstop=4
+au BufNewFile,BufRead *.py set shiftwidth=4
+au BufNewFile,BufRead *.py set textwidth=79
+au BufNewFile,BufRead *.py set expandtab
+au BufNewFile,BufRead *.py set autoindent
+au BufNewFile,BufRead *.py set fileformat=unix
 " Make it so we can use system clipboard like a normal text editor
-set clipboard=unnamed
+set clipboard=unnamedplus
 nnoremap <F3> :set invnumber<Enter><F2>
 " Run the file in python's interactive mode, importing it as a module
 nnoremap <F4> :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
@@ -63,15 +74,20 @@ nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter><Enter
 nnoremap <F7> :make
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");flake8 $(basename "%:p")<Enter>
-nnoremap <F9> :%!python3 -m json.tool
+nnoremap <F9> :%!python3 -m json.tool --sort-keys<Enter>"
 nnoremap <F10> :!cd $(dirname "%:p"); python3 -c 'import %:t:r; help(%:t:r)'<Enter><Enter>
 nnoremap <C-l> $
 nnoremap <C-h> ^
+imap <C-l> OC
+imap <C-h> OD
+imap <C-j> OB
+imap <C-k> OA
 
 " ,e to fast find files
 nmap <leader>e :e **/
 map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
+nnoremap <C-K> :!cat % \| xclip -i -selection clipboard<Enter><Enter>
 "set t_Co=256
 "set t_ut=
 "colorscheme molokai

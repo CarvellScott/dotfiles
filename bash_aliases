@@ -1,4 +1,5 @@
 # General
+alias firefox='/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe'
 alias bashaliases='vi ~/.bash_aliases'
 alias fuck='sudo !!'
 alias g='grep -I --exclude={tags,.git}'
