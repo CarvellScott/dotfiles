@@ -59,7 +59,17 @@ wd() {
     cd "$1"
 }
 
-v() {
-    source ~/virtualenvs/$1/bin/activate
-}
 complete -F _wd wd
+
+_v() {
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    # Split working directory on instances of '/'
+    words=$(ls "$HOME/venvs")
+    COMPREPLY=( $(compgen -W "$words" -- $cur) )
+}
+
+v() {
+    source ~/venvs/$1/bin/activate
+}
+
+complete -F _v v
