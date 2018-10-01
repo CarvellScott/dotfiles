@@ -8,14 +8,14 @@
     df = "!f() { git difftool -d $1^ $1 ; } ; f"
     hooked = "!cp ~/dotfiles/githooks/* ./.git/hooks"
     l = log --graph --oneline --decorate
-    ppp = "!$SCRIPTS/git_ppp.py | vi -"
+    ppp = "!$HOME/dotfiles/gitscripts/git_ppp.py | vi -"
     pytags = "!ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./"
     s = status -suno
     lint = "!flake8 $(git diff --name-only | sed -ne '/.py/p')"
     lint-cached = "!flake8 $(git diff --name-only --cached | sed -ne '/.py/p')"
     # Lists remote urls for all remotes added.
-    rurls = "!$SCRIPTS/git_remotes.py"
+    rurls = "!$HOME/dotfiles/gitscripts/git_remotes.py"
     #A smart git commit that uses ".commitmsg" if it's more up-to-date than the files
-    smc = "!$SCRIPTS/git_smart_commit.py"
-    todos = "!$SCRIPTS/git_todos.py"
+    smc = "!$HOME/dotfiles/gitscripts/git_smart_commit.py"
+    todos = "!$HOME/dotfiles/gitscripts/git_todos.py"
     #TODO: A git hook that calls make <something> if code changes that is supposed to update something
