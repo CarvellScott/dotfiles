@@ -28,7 +28,8 @@ def make_zip():
 
 
 def email_dotfiles():
-    s = smtplib.SMTP("smtp.ord1.corp.rackspace.com", 587)
+    # TODO: define smtp_server, from_email, to_email
+    s = smtplib.SMTP(smtp_server, 587)
     msg = MIMEMultipart("alternative")
     msg["Subject"] = "dotfiles {}".format(time.strftime("%F"))
     msg["From"] = from_email

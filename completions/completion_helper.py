@@ -2,6 +2,7 @@
 import errno
 import json
 import os
+import pathlib
 import shlex
 import sys
 
@@ -25,9 +26,11 @@ def helper(completion_function):
         # if the "COMP" variables aren't set, the script is being executed by
         # something other than complete. Assuming it's the user, we print up
         # some installation instructions that they can evaluate.
-        args = ["complete", "-C"]
-        args.extend(sys.argv[:2])
-        print("Redirect this into your .bashrc to install:", file=sys.stderr)
+        script_path = pathlib.Path(sys.argv[0]).absolute()
+        args = ["complete", "-C", str(script_path)]
+        args.extend(sys.argv[1:])
+        if sys.stdout.isatty():
+            print("Redirect this into your .profile to install:", file=sys.stderr)
         print(" ".join(args).strip())
         return
 

@@ -42,7 +42,6 @@ _vich() {
     COMPREPLY=( $(compgen -W "$words" -- $cur) )
 }
 
-
 complete -F _vich vich
 
 # Jump to the $PWD of other terminals.
@@ -73,3 +72,6 @@ v() {
 }
 
 complete -F _v v
+# Source a bunch of auto-completion functions, most of which aren't written in bash
+. $HOME/dotfiles/profile-completions
+. $HOME/dotfiles/pip_completion

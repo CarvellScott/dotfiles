@@ -1,0 +1,2 @@
+complete -C $HOME/dotfiles/completions/complete_xclip.py xclip
+complete -C $HOME/dotfiles/completions/complete_vit.py vit
