@@ -1,77 +1,17 @@
-#----------CUSTOM STUFF STARTS HERE (this line included)----------
 # Jump to directory by name alone. This should be on by default
 shopt -s autocd
 
-SCRIPTS=/mnt/c/Users/Carvell/gitrepos
+SCRIPTS=~/me/gitrepos
 
 # Every colon-separated directory here can be cd'd into from anywhere
 if test "${PS1+set}"; then
     CDPATH=.:~:..:$SCRIPTS
 fi
 
-# No cd ../../.., no cd ......, just type "up" and the directory name.
-
-up() {
-    cd $(echo $PWD | sed -e "s/$1.*/$1/")
-}
-
-_up() {
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    # Obtain working directory, pipe it into sed.
-    # Strip off /home/$USER and the current directory name.
-    # Substitute any spaces with "\ "
-    words=$(echo $PWD | sed -e "s/\/home\/$USER\/\(.*\)\/[^/].*$/\1/" -e "s/ /\\\ /g")
-    # Split working directory on instances of '/'
-    words=(${words////$'\n'})
-    words=${words[@]}
-    COMPREPLY=( $(compgen -W "$words" -- $cur) )
-}
-
-
-complete -F _up up
-
-# Edit stuff in $SCRIPTS from anywhere
-vich() {
-    vi $SCRIPTS/$@
-}
-
-# Add auto-completion
-_vich() {
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    words=$(find $SCRIPTS -regex ".*$cur.*.py" | xargs -I % basename %)
-    COMPREPLY=( $(compgen -W "$words" -- $cur) )
-}
-
-complete -F _vich vich
-
-# Jump to the $PWD of other terminals.
-_wd() {
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    local exp="s/^n\(..*\)/\"\1\"/p"
-    words=$(pgrep 'bash' | xargs -I % lsof -a -d cwd -F -p % | sed -n -e $exp | sort -u)
-    IFS=$'\n'
-    COMPREPLY=( $(compgen -W "$words" -- $cur | sed -e 's/\(.*\)/\"\1\"/') )
-    IFS=$' \t\n'
-}
-
-wd() {
-    cd "$1"
-}
-
-complete -F _wd wd
-
-_v() {
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    # Split working directory on instances of '/'
-    words=$(ls "$HOME/venvs")
-    COMPREPLY=( $(compgen -W "$words" -- $cur) )
-}
-
-v() {
-    source ~/venvs/$1/bin/activate
-}
-
-complete -F _v v
-# Source a bunch of auto-completion functions, most of which aren't written in bash
-. $HOME/dotfiles/profile-completions
-. $HOME/dotfiles/pip_completion
+# Source bash functions/completions by file.
+# This helps keep work settings separate from home while sharing code.
+. $HOME/dotfiles/common_profile_parts/up
+. $HOME/dotfiles/common_profile_parts/v
+. $HOME/dotfiles/common_profile_parts/wd
+. $HOME/dotfiles/common_profile_parts/pip_completion
+. $HOME/dotfiles/common_profile_parts/python_completions
