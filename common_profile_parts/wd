@@ -1,0 +1,15 @@
+# Jump to the $PWD of other terminals.
+_wd() {
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    local exp="s/^n\(..*\)/\"\1\"/p"
+    words=$(pgrep 'bash' | xargs -I % lsof -a -d cwd -F -p % | sed -n -e $exp | sort -u)
+    IFS=$'\n'
+    COMPREPLY=( $(compgen -W "$words" -- $cur | sed -e 's/\(.*\)/\"\1\"/') )
+    IFS=$' \t\n'
+}
+
+wd() {
+    cd "$1"
+}
+
+complete -F _wd wd
