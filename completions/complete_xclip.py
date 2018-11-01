@@ -1,5 +1,33 @@
 #!/usr/bin/env python3
-from completion_helper import helper
+import unittest
+import shlex
+from completion_helper import helper, run_bash_completion
+
+
+class CompletionTestCase_xclip(unittest.TestCase):
+    def test_end_with_space(self):
+        comp_line = "xclip -o -selection "
+        completion_exe = "/$HOME/dotfiles/completions/complete_xclip.py"
+        stdout = run_bash_completion(comp_line, completion_exe)
+        sorted_stdout = "\n".join(sorted(shlex.split(stdout)))
+        expected = "buffer-cut\nclipboard\nprimary\nsecondary"
+        self.assertEqual(sorted_stdout, expected, "\"{}\"".format(comp_line))
+
+    def test_still_completing(self):
+        # The word is still being completed, if there's another word that
+        # starts with it, then that would be a viable completion option.
+        comp_line = "xclip -o -selection"
+        completion_exe = "/$HOME/dotfiles/completions/complete_xclip.py"
+        stdout = run_bash_completion(comp_line, completion_exe)
+        self.assertEqual(stdout, "-selection\n", "\"{}\"".format(comp_line))
+
+    def test_partial(self):
+        # We have one letter of the word to work with. The only valid option
+        # here should be "primary"
+        comp_line = "xclip -o -selection p"
+        completion_exe = "/$HOME/dotfiles/completions/complete_xclip.py"
+        stdout = run_bash_completion(comp_line, completion_exe)
+        self.assertEqual(stdout, "primary\n", "\"{}\"".format(comp_line))
 
 
 def completion_hook(cmd, curr_word, prev_word, comp_line, comp_point):
@@ -14,7 +42,7 @@ def completion_hook(cmd, curr_word, prev_word, comp_line, comp_point):
 
     # Complete options for selection.
     if prev_word == "-selection":
-        potential_matches = ["primary", "secondary", "clipboard", "buffer-cut"]
+        potential_matches = ["buffer-cut", "clipboard", "primary", "secondary"]
 
     matches = [k for k in potential_matches if k.startswith(curr_word)]
     return matches
