@@ -71,7 +71,7 @@ nnoremap <F4> :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
 nnoremap <F5> :!cd $(dirname "%:p");"%:p"<Enter>
 
 " Run the file assuming it's a bunch of unittests
-nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter><Enter>
+nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
 nnoremap <F7> ggO#!/usr/bin/env python3<Enter><Esc>Gidef main():<Enter>pass<Enter><Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");flake8 $(basename "%:p")<Enter>
