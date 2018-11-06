@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import errno
 import json
 import os
@@ -20,7 +21,7 @@ def helper(completion_function):
     try:
         comp_line = os.environ["COMP_LINE"]
         comp_point = os.environ["COMP_POINT"]
-    except (KeyboardInterrupt):
+    except KeyError:
         # if the "COMP" variables aren't set, the script is being executed by
         # something other than complete. Assuming it's the user, we print up
         # some installation instructions that they can evaluate.
@@ -57,23 +58,10 @@ def helper(completion_function):
         results = completion_function(**comp_vars)
 
     # bash reads stdout for completion. Each entry is on a new line.
-    results = [shlex.quote(i) for i in results]
     if len(results):
         print("\n".join(results))
+        print(json.dumps(comp_vars, indent=4), file=sys.stderr)
 
-    # Write the contents to a fifo. Should probably use actual logging.
-    if not os.path.exists(FIFO_PATH):
-        os.mkfifo(FIFO_PATH)
-    try:
-        f = os.open(FIFO_PATH, os.O_WRONLY | os.O_NONBLOCK)
-        os.write(f, bytes(json.dumps(comp_vars, indent=4), "utf-8"))
-        os.close(f)
-    except OSError as exc:
-        if exc.errno == errno.ENXIO:
-            pass
-        else:
-            print(exc, file=sys.stderr)
-            raise
 
 def run_bash_completion(comp_line, completion_exe):
     cmd_line_args = shlex.split(comp_line)
@@ -103,23 +91,26 @@ def run_bash_completion(comp_line, completion_exe):
 
     # That long mess of bash needs to be run in a subshell because bash is
     # weird about executing builtins.
-    process = subprocess.run(
+    finished_process = subprocess.run(
         ['bash', '-i', '-c', subshell_cmd],
-        stdout=subprocess.PIPE, universal_newlines=True
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        universal_newlines=True
     )
-    return process.stdout
+    return finished_process.stdout.strip()
+
 
 def main():
     # Any completion function wrapped by helper will generate output to be
     # written to a temporary fifo.
     # This will constantly try to read from the fifo.
-    while True:
-        try:
-            with open(FIFO_PATH, "r") as f:
-                print(f.read())
-            os.unlink(FIFO_PATH)
-        except FileNotFoundError:
-            pass
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "exe",
+        help=("Path to an executable to be run. Its output will be used to"
+              "generate completions"),
+    )
+    args, remaining_args = parser.parse_known_args()
+    print(run_bash_completion(" ".join(remaining_args) + " ", args.exe))
 
 
 if __name__ == "__main__":
