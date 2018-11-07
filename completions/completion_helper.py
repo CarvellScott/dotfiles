@@ -60,8 +60,20 @@ def helper(completion_function):
     # bash reads stdout for completion. Each entry is on a new line.
     if len(results):
         print("\n".join(results))
-        print(json.dumps(comp_vars, indent=4), file=sys.stderr)
 
+    # Write the contents to a fifo. Should probably use actual logging.
+    if not os.path.exists(FIFO_PATH):
+        os.mkfifo(FIFO_PATH)
+    try:
+        f = os.open(FIFO_PATH, os.O_WRONLY | os.O_NONBLOCK)
+        os.write(f, bytes(json.dumps(comp_vars, indent=4), "utf-8"))
+        os.close(f)
+    except OSError as exc:
+        if exc.errno == errno.ENXIO:
+            pass
+        else:
+            print(exc, file=sys.stderr)
+            raise
 
 def run_bash_completion(comp_line, completion_exe):
     cmd_line_args = shlex.split(comp_line)
@@ -98,19 +110,26 @@ def run_bash_completion(comp_line, completion_exe):
     )
     return finished_process.stdout.strip()
 
-
 def main():
     # Any completion function wrapped by helper will generate output to be
     # written to a temporary fifo.
     # This will constantly try to read from the fifo.
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "exe",
-        help=("Path to an executable to be run. Its output will be used to"
-              "generate completions"),
-    )
-    args, remaining_args = parser.parse_known_args()
-    print(run_bash_completion(" ".join(remaining_args) + " ", args.exe))
+    if False:
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "exe",
+            help=("Path to an executable to be run. Its output will be used to"
+                  "generate completions"),
+        )
+        args, remaining_args = parser.parse_known_args()
+        print(run_bash_completion(" ".join(remaining_args) + " ", args.exe))
+    while True:
+        try:
+            with open(FIFO_PATH, "r") as f:
+                print(f.read())
+            os.unlink(FIFO_PATH)
+        except FileNotFoundError:
+            pass
 
 
 if __name__ == "__main__":
