@@ -40,14 +40,13 @@ def completion_hook(cmd, curr_word, prev_word, **kwargs):
 
 
 def main():
-    # The easy way
-    if True:
-        helper(completion_hook)
-    # The hard way
-    else:
-        results = completion_hook(*sys.argv[1:])
-        if len(results):
-             print("\n".join(results))
+    helper(completion_hook)
+    # Alternatively, you could trade the completion_helper import for sys and
+    # use the following (you'll have to extract environment vars yourself):
+
+    # results = completion_hook(*sys.argv[1:])
+    # if len(results):
+    #      print("\n".join(results))
 
 
 if __name__ == "__main__":

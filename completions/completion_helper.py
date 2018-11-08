@@ -1,22 +1,28 @@
 #!/usr/bin/env python3
-import argparse
-import errno
-import json
 import os
 import pathlib
 import shlex
 import subprocess
 import sys
 
-FIFO_PATH = "/tmp/completion_tester.fifo"
-
 
 def helper(completion_function):
-    # TODO: Support other shells.
+    """
+    ``completion_function`` is assumed to take 3 positional arguments and 2
+    optional keyword arguments. In order, those are:
+    command - The command the completion should be run for.
+    current_word - The current word being typed at the terminal.
+    previous_word - The previous word in the line.
+    comp_line - The entire line of text entered at the terminal so far.
+    comp_point - The cursor's index in the line entered at the terminal.
+    completion_function should return an array of strings.
+    """
+    # TODO: Support other shells?
     shell = os.environ.get("SHELL")
     if "bash" not in shell:
         quit("Sorry, only bash supported at the moment!")
 
+    comp_exe = str(pathlib.Path(sys.argv[0]).absolute())
     # Get arguments and environment variables
     try:
         comp_line = os.environ["COMP_LINE"]
@@ -25,11 +31,11 @@ def helper(completion_function):
         # if the "COMP" variables aren't set, the script is being executed by
         # something other than complete. Assuming it's the user, we print up
         # some installation instructions that they can evaluate.
-        script_path = pathlib.Path(sys.argv[0]).absolute()
-        args = ["complete", "-C", str(script_path)]
+        args = ["complete", "-C", comp_exe]
         args.extend(sys.argv[1:])
         if sys.stdout.isatty():
-            print("Redirect this into your .profile to install:", file=sys.stderr)
+            usr_msg = "Redirect this into your .profile to install:"
+            print(usr_msg, file=sys.stderr)
         print(" ".join(args).strip())
         return
 
@@ -46,14 +52,6 @@ def helper(completion_function):
         comp_point=comp_point
     )
 
-    # completion_function is assumed to take 3 positional arguments and 2
-    # optional keyword arguments. In order, those are:
-    # command - The command the completion should be run for.
-    # current_word - The current word being typed at the terminal.
-    # previous_word - The previous word in the line.
-    # comp_line - The entire line of text entered at the terminal so far.
-    # comp_point - The cursor's index in the line entered at the terminal.
-    # completion_function should return an array of strings.
     if completion_function:
         results = completion_function(**comp_vars)
 
@@ -61,23 +59,20 @@ def helper(completion_function):
     if len(results):
         print("\n".join(results))
 
-    # Write the contents to a fifo. Should probably use actual logging.
-    if not os.path.exists(FIFO_PATH):
-        os.mkfifo(FIFO_PATH)
-    try:
-        f = os.open(FIFO_PATH, os.O_WRONLY | os.O_NONBLOCK)
-        os.write(f, bytes(json.dumps(comp_vars, indent=4), "utf-8"))
-        os.close(f)
-    except OSError as exc:
-        if exc.errno == errno.ENXIO:
-            pass
-        else:
-            print(exc, file=sys.stderr)
-            raise
 
-def run_bash_completion(comp_line, completion_exe):
+def bash_complete(comp_line, comp_exe):
+    """
+    This is an approximation of how bash's complete function generates matches.
+    ``comp_line`` Is the line assumed to be at the terminal.
+    ``comp_exe`` is the path to an executable file that will generate matches.
+    Returns the stdout of comp_exe after running with parameters normally
+    supplied by complete.
+    """
     cmd_line_args = shlex.split(comp_line)
     cmd = cmd_line_args[0]
+    comp_point = str(len(comp_line))
+    curr_word = ""
+    prev_word = cmd
     if comp_line.endswith(" "):
         curr_word = ""
         prev_word = cmd_line_args[-1]
@@ -85,52 +80,20 @@ def run_bash_completion(comp_line, completion_exe):
         curr_word = cmd_line_args[-1]
         prev_word = cmd_line_args[-2]
 
-    # install cmd is what you execute in bash to install the completion
-    install_cmd = "complete -C {} {}".format(completion_exe, cmd)
-
-    # Summary of this command:
-    # 1. Install the completion to the current shell environment
-    # 2. Set environment variables used by completion
-    # 3. Run the executable that's supposed to produce completion for
-    # curr_word, supplying parameters in the same way complete does.
-    subshell_cmd = (
-        '{install_cmd}; COMP_LINE="{comp_line}" COMP_POINT={comp_point} '
-        '{completion_exe} {cmd} {curr_word} {prev_word}'
-    ).format(
-        **locals(),
-        comp_point=len(comp_line)
-    )
-
-    # That long mess of bash needs to be run in a subshell because bash is
-    # weird about executing builtins.
+    os.environ.update({
+        "COMP_LINE": comp_line,
+        "COMP_POINT": comp_point
+    })
     finished_process = subprocess.run(
-        ['bash', '-i', '-c', subshell_cmd],
+        [comp_exe, cmd, curr_word, prev_word],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-        universal_newlines=True
+        universal_newlines=True,
     )
     return finished_process.stdout.strip()
 
-def main():
-    # Any completion function wrapped by helper will generate output to be
-    # written to a temporary fifo.
-    # This will constantly try to read from the fifo.
-    if False:
-        parser = argparse.ArgumentParser()
-        parser.add_argument(
-            "exe",
-            help=("Path to an executable to be run. Its output will be used to"
-                  "generate completions"),
-        )
-        args, remaining_args = parser.parse_known_args()
-        print(run_bash_completion(" ".join(remaining_args) + " ", args.exe))
-    while True:
-        try:
-            with open(FIFO_PATH, "r") as f:
-                print(f.read())
-            os.unlink(FIFO_PATH)
-        except FileNotFoundError:
-            pass
-
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and pathlib.Path(sys.argv[1]).exists():
+        print(bash_complete(" ".join(sys.argv[2:]), sys.argv[1]))
+    else:
+        print("usage: completion_helper executable line", file=sys.stderr)
