@@ -1,16 +1,5 @@
 # Jump to directory by name alone. This should be on by default
 shopt -s autocd
-
-SCRIPTS=~/me/gitrepos
-
-# Every colon-separated directory here can be cd'd into from anywhere
-if test "${PS1+set}"; then
-    CDPATH=.:~:..:$SCRIPTS
-fi
-
-# Source bash functions/completions by file.
-# This helps keep work settings separate from home while sharing code.
-. $HOME/dotfiles/common_profile_parts/up
 . $HOME/dotfiles/common_profile_parts/v
 . $HOME/dotfiles/common_profile_parts/wd
 . $HOME/dotfiles/common_profile_parts/pip_completion

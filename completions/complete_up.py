@@ -24,9 +24,9 @@ def completion_hook(cmd, curr_word, prev_word, **kwargs):
             # Return the path if we've narrowed it down.
             if len(matches) == 1:
                 matches = [str(path_dict[s]) for s in matches]
-            else:
-                matches = [str(p) for p in paths if str(p).endswith(curr_word)]
         # Return the path if there's an exact match in path_dict
+        # Even if there's a word that starts with curr_word, the shortest takes
+        # priority.
         if curr_word in path_dict.keys():
             matches = [str(path_dict[curr_word])]
     else:
