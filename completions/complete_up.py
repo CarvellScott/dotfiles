@@ -11,26 +11,27 @@ def completion_hook(cmd, curr_word, prev_word, **kwargs):
     if "/" in prev_word:
         return matches
 
-    parts = curr_path.parts[:-1]
+    # This allows path completion as normal
+    if "/" in curr_word and len(curr_word) > 0:
+        return [str(p) for p in paths if str(p).startswith(curr_word)]
+
     # Map path parts to parent paths, prioritizing those in proximity.
     path_dict = {}
     for p in reversed(paths):
-        path_dict[p.stem] = p
+        # p.stem returns "" for a path of "/", so we use p.parts[-1] instead
+        path_dict[p.parts[-1]] = p
 
-    if curr_word:
-        # First complete a word that makes up a part of the path
-        if curr_word not in parts:
-            matches = [s for s in parts if s.startswith(curr_word)]
-            # Return the path if we've narrowed it down.
-            if len(matches) == 1:
-                matches = [str(path_dict[s]) for s in matches]
-        # Return the path if there's an exact match in path_dict
-        # Even if there's a word that starts with curr_word, the shortest takes
-        # priority.
-        if curr_word in path_dict.keys():
-            matches = [str(path_dict[curr_word])]
+    # Return the path if there's an exact match in path_dict
+    # Even if there's a word that starts with curr_word, the shortest takes
+    # priority.
+    if curr_word in path_dict.keys():
+        matches = [str(path_dict[curr_word])]
     else:
-        matches = list(parts)
+        # If no exact match, do a fuzzy match for part of the path
+        matches = [s for s in path_dict.keys() if s.startswith(curr_word)]
+        # Return the path if it's been narrowed down.
+        if len(matches) == 1:
+            matches = [str(path_dict[matches[0]])]
 
     return matches
 
