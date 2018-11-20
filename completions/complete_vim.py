@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pathlib
 import re
-from completion_helper import helper
+from completion_helper import bash_completion_decorator
 
 
 def _get_tags():
@@ -10,11 +10,12 @@ def _get_tags():
     tags_path = curr_path / "tags"
 
     # Search the current directory, then parent directories for tags file
-    if not tags_path.exists():
-        for parent in curr_path.absolute().parents:
-            tags_path = parent / "tags"
-            if tags_path.exists():
-                break
+    if False:
+        if not tags_path.exists():
+            for parent in curr_path.absolute().parents:
+                tags_path = parent / "tags"
+                if tags_path.exists():
+                    break
 
     # If the tags file exists, open it and build a sorted list of tags.
     if tags_path.exists():
@@ -28,7 +29,8 @@ def _get_tags():
     return tags
 
 
-def completion_hook(cmd, curr_word, prev_word, **kwargs):
+@bash_completion_decorator
+def completion_hook(cmd, curr_word, prev_word):
     matches = []
     if curr_word.startswith("-"):
         matches.append("-t")
@@ -39,15 +41,5 @@ def completion_hook(cmd, curr_word, prev_word, **kwargs):
     return matches
 
 
-def main():
-    helper(completion_hook)
-    # Alternatively, you could trade the completion_helper import for sys and
-    # use the following (you'll have to extract environment vars yourself):
-
-    # results = completion_hook(*sys.argv[1:])
-    # if len(results):
-    #      print("\n".join(results))
-
-
 if __name__ == "__main__":
-    main()
+    completion_hook()
