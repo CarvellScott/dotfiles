@@ -56,6 +56,11 @@ def bash_completion_decorator(func):
     return wrapper
 
 
+class CompletionError(Exception):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
 def bash_complete(comp_line, comp_exe):
     """
     This is an approximation of how bash's complete function generates matches.
@@ -82,6 +87,8 @@ def bash_complete(comp_line, comp_exe):
         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         universal_newlines=True,
     )
+    if finished_process.stderr:
+        raise CompletionError(finished_process.stderr)
     return finished_process.stdout.strip()
 
 
