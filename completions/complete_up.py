@@ -3,7 +3,7 @@ import pathlib
 import os
 import unittest
 import shlex
-from completion_helper import bash_complete, bash_completion_decorator
+from completion_utils import bash_complete, bash_completion_decorator
 
 
 class CompletionTestCase_up(unittest.TestCase):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import unittest
-from completion_helper import bash_completion_decorator, bash_complete
+from completion_utils import bash_completion_decorator, bash_complete
 
 
 class CompletionTestCase_xclip(unittest.TestCase):
