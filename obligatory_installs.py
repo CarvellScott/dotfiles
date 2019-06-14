@@ -3,8 +3,7 @@ import pathlib
 import subprocess
 
 
-def main():
-    # Append the profile index if it's not there already
+def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
     profile_appendix_added = False
     with open(profile_path, "r") as f:
@@ -15,8 +14,9 @@ def main():
         with open(profile_path, "a") as f:
             f.write(". ~/dotfiles/profile-appendix\n")
 
-    # Install Vundle for vim
-    bundle_path = pathlib.Path.home() / ".vim" / "bundle"
+
+def install_vundle():
+    bundle_path = pathlib.Path.home() / ".vim" / "bundle" / "Vundle.vim"
     if not bundle_path.exists():
         command = [
             "git", "clone", "https://github.com/VundleVim/Vundle.vim.git",
@@ -28,8 +28,8 @@ def main():
         except subprocess.CalledProcessError as e:
             raise e
 
-    # Symlink dotfiles
-    dotfiles = ["bash_aliases", "gitconfig", "tmux.conf", "vimrc"]
+def symlink_dotfiles():
+    dotfiles = ["bash_aliases", "dircolors", "gitconfig", "tmux.conf", "vimrc"]
     for filename in dotfiles:
         symlink_path = pathlib.Path.home() / ("." + filename)
         if not symlink_path.exists():
@@ -37,6 +37,26 @@ def main():
             symlink_path.symlink_to(target)
         else:
             print("{} exists. Skipping.".format(symlink_path))
+
+
+def symlink_windows_user():
+    process = subprocess.run(
+        ["cmd.exe", "/c", "echo", "%username%"],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        universal_newlines=True
+    )
+    windows_user = process.stdout.strip()
+    windows_user_path = pathlib.Path("/mnt/c/Users") / windows_user
+    symlink_path = pathlib.Path.home() / "me"
+    if not symlink_path.exists():
+        symlink_path.symlink_to(windows_user_path)
+
+
+def main():
+    append_to_profile()
+    install_vundle()
+    symlink_dotfiles()
+    symlink_windows_user()
 
 
 if __name__ == "__main__":
