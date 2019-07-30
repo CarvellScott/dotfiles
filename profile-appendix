@@ -1,3 +1,8 @@
+# Jump around directories a lot easier
+if test "${PS1+set}"; then
+    CDPATH=.:~:..
+fi
+
 # Jump to directory by name alone. This should be on by default
 shopt -s autocd
 . $HOME/dotfiles/common_profile_parts/v

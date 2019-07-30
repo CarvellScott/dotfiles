@@ -77,11 +77,11 @@ nnoremap <F5> :!cd $(dirname "%:p");"%:p"<Enter>
 
 " Run the file assuming it's a bunch of unittests
 nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
-nnoremap <F7> ggO#!/usr/bin/env python3<Enter><Esc>Gidef main():<Enter>pass<Enter><Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
+nnoremap <F7> :!python3 -m doctest "%:p" <Enter>
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");flake8 $(basename "%:p")<Enter>
 nnoremap <F9> :%!python3 -m json.tool --sort-keys<Enter>"
-nnoremap <F10> :!cd $(dirname "%:p"); python3 -c 'import %:t:r; help(%:t:r)'<Enter><Enter>
+nnoremap <F10> ggO#!/usr/bin/env python3<Enter><Esc>Gidef main():<Enter>pass<Enter><Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
 imap <C-l> OC
 imap <C-h> OD
 imap <C-j> OB
@@ -91,7 +91,7 @@ imap <C-k> OA
 nmap <leader>e :e **/
 map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
-nnoremap <C-K> :!cat % \| xclip -i -selection clipboard<Enter><Enter>
+nnoremap <C-K> :!cat % \| python -m pyperclip -c<Enter><Enter>
 "set t_Co=256
 "set t_ut=
 "colorscheme molokai
