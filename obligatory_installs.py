@@ -52,11 +52,23 @@ def symlink_windows_user():
         symlink_path.symlink_to(windows_user_path)
 
 
+def symlink_bin():
+    binaries = ["firefox", "xclip"]
+    for bin_name in binaries:
+        py_name = bin_name + ".py"
+        symlink_path = pathlib.Path.home() / "bin" / bin_name
+        if not symlink_path.exists():
+            target = pathlib.Path().home() / "dotfiles" / py_name
+            symlink_path.symlink_to(target)
+            symlink_path.chmod(0o777)
+
+
 def main():
     append_to_profile()
     install_vundle()
     symlink_dotfiles()
     symlink_windows_user()
+    symlink_bin()
 
 
 if __name__ == "__main__":

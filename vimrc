@@ -91,7 +91,7 @@ imap <C-k> OA
 nmap <leader>e :e **/
 map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
-nnoremap <C-K> :!cat % \| python -m pyperclip -c<Enter><Enter>
+nnoremap <C-K> :!cat % \| xclip -i -selection clipboard<Enter><Enter>
 "set t_Co=256
 "set t_ut=
 "colorscheme molokai
