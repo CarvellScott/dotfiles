@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import unittest
-from completion_utils import bash_completion_decorator, bash_complete
+
+try:
+    import completion_utils
+except:
+    import df_completion_utils as completion_utils
 
 
 class CompletionTestCase_xclip(unittest.TestCase):
@@ -9,7 +13,7 @@ class CompletionTestCase_xclip(unittest.TestCase):
         self.exe = __file__
 
     def assert_completion(self, comp_line, expected):
-        stdout = bash_complete(comp_line, self.exe)
+        stdout = completion_utils.bash_complete(comp_line, self.exe)
         err_template = "Expected {}, got {}"
         err = err_template.format(expected, stdout)
         self.assertEqual(stdout, expected, err)
@@ -36,7 +40,7 @@ class CompletionTestCase_xclip(unittest.TestCase):
         self.assert_completion(comp_line=comp_line, expected=expected)
 
 
-@bash_completion_decorator
+@completion_utils.bash_completion_decorator
 def completion_hook(cmd, curr_word, prev_word):
     potential_matches = []
     # Complete command options. The single-letter commands all start with the

@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import pathlib
 import re
-from completion_utils import bash_completion_decorator
 
+try:
+    import completion_utils
+except (ImportError, ModuleNotFoundError):
+    import df_completion_utils as completion_utils
 
 def _get_tags():
     tags = []
@@ -29,7 +32,7 @@ def _get_tags():
     return tags
 
 
-@bash_completion_decorator
+@completion_utils.bash_completion_decorator
 def completion_hook(cmd, curr_word, prev_word):
     matches = []
     if curr_word.startswith("-"):

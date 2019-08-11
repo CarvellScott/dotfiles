@@ -3,14 +3,18 @@ import pathlib
 import os
 import unittest
 import shlex
-from completion_utils import bash_complete, bash_completion_decorator
+
+try:
+    import completion_utils
+except (ImportError, ModuleNotFoundError):
+    import df_completion_utils as completion_utils
 
 
 class CompletionTestCase_up(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.test_path = "/mnt/c/Users/U/Userutils/foobar"
         self.exe = __file__
-        self.path = "/mnt/c/Users/U/Userutils/foobar"
 
     @property
     def path(self):
@@ -20,42 +24,61 @@ class CompletionTestCase_up(unittest.TestCase):
 
     @path.setter
     def path(self, path):
+        # The completion script gets called as a part of a subprocess, so you
+        # can't simply pass a constant path to it. You need to set an
+        # environment variable so it knows that it's testing stuff.
         os.environ["COMPLETE_UP_TEST_DIRECTORY"] = path
 
     def assert_completion(self, comp_line, expected):
         """
         A sort of custom assertion specifically for bash completion.
         """
-        with self.subTest(comp_line=comp_line, path=self.path):
-            stdout = bash_complete(comp_line, self.exe)
-            actual_list = repr(sorted(stdout.splitlines()))
-            expected_list = repr(sorted(expected.splitlines()))
-            err = f"\nExpected: {expected_list}\nActual: {actual_list}"
-            assert actual_list == expected_list, err
+        stdout = completion_utils.bash_complete(comp_line, self.exe)
+        actual_list = set(stdout.splitlines())
+        expected_list = set(expected)
+        err = f"\nExpected: {expected_list}\nActual: {actual_list}"
+        assert actual_list == expected_list, err
 
     def test_blank(self):
         # Exact match should show EVERYTHING
-        self.assert_completion("up ", "/\nc/\nmnt/\nU/\nUsers/\nUserutils/")
+        self.path = self.test_path
+        expected = {
+            "/",
+            "c/",
+            "mnt/",
+            "U/",
+            "Users/",
+            "Userutils/"
+        }
+        # assert os.environ["COMPLETE_UP_TEST_DIRECTORY"]
+        self.assert_completion("up ", expected)
 
     def test_specifics_give_exact_path(self):
         # Exact match should give the path.
-        self.assert_completion("up U/", "/mnt/c/Users/U")
+        self.path = self.test_path
+        self.assert_completion("up U/", ["/mnt/c/Users/U"])
 
     def test_ambiguity_gives_keys(self):
         # Ambiguous match should give keys that start with the input.
-        self.assert_completion("up Us", "Users/\nUserutils/")
+        self.path = self.test_path
+        expected = {
+            "Users/",
+            "Userutils/"
+        }
+        self.assert_completion("up Us", expected)
 
     def test_you_are_here_already(self):
         # The script shouldn't bother suggesting the current directory.
+        self.path = self.test_path
         self.assert_completion("up foobar", "")
 
 
-@bash_completion_decorator
+@completion_utils.bash_completion_decorator
 def completion_hook(cmd, curr_word, prev_word):
     matches = []
-    # If you set this evironment variable, outside of the test case above that
-    # does so, you deserve whatever happens to you.
+    # This environment variable is presumed to only be set in the test case.
     test_path = os.environ.get("COMPLETE_UP_TEST_DIRECTORY")
+
     curr_path = None
     if test_path:
         curr_path = pathlib.Path(test_path)
@@ -78,11 +101,12 @@ def completion_hook(cmd, curr_word, prev_word):
         key = shlex.quote(key) if " " in key else key
         path_dict[key] = p
 
-    matches = [s for s in path_dict.keys() if s.startswith(cmd_args)]
+    # Return the KEY to the paths that match the arguments
+    matches = {s for s in path_dict.keys() if s.startswith(cmd_args)}
 
-    # Return the path if it's been narrowed down.
+    # But if it's been narrowed down, return the full path
     if len(matches) == 1:
-        matches = [str(path_dict[matches[0]])]
+        matches = {str(path_dict[matches.pop()])}
 
     return matches
 
