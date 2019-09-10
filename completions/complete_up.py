@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import pathlib
 import os
-import unittest
 import shlex
 
 try:
@@ -10,11 +9,12 @@ except (ImportError, ModuleNotFoundError):
     import df_completion_utils as completion_utils
 
 
-class CompletionTestCase_up(unittest.TestCase):
+class CompletionTestCase_up(completion_utils.CompletionTestCase):
+    exe = __file__
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.test_path = "/mnt/c/Users/U/Userutils/foobar"
-        self.exe = __file__
 
     @property
     def path(self):
@@ -73,43 +73,45 @@ class CompletionTestCase_up(unittest.TestCase):
         self.assert_completion("up foobar", "")
 
 
-@completion_utils.bash_completion_decorator
-def completion_hook(cmd, curr_word, prev_word):
-    matches = []
-    # This environment variable is presumed to only be set in the test case.
-    test_path = os.environ.get("COMPLETE_UP_TEST_DIRECTORY")
+class CompleteUp(completion_utils.BashCompletion):
+    completion_test_case = CompletionTestCase_up
 
-    curr_path = None
-    if test_path:
-        curr_path = pathlib.Path(test_path)
-    else:
-        curr_path = pathlib.Path().absolute()
+    def completion_hook(self, command, curr_word, prev_word):
+        matches = []
+        # This environment variable is presumed to only be set in the test case.
+        test_path = os.environ.get("COMPLETE_UP_TEST_DIRECTORY")
 
-    paths = list(curr_path.parents)
+        curr_path = None
+        if test_path:
+            curr_path = pathlib.Path(test_path)
+        else:
+            curr_path = pathlib.Path().absolute()
 
-    comp_line = os.environ["COMP_LINE"]
-    cmd_args = comp_line[len(cmd) + 1:]
+        paths = list(curr_path.parents)
 
-    # Map path parts to parent paths, prioritizing things closer to the end as
-    # keys.
-    path_dict = {}
-    for p in reversed(paths):
-        # p.stem returns "" for a path of "/", so we use p.parts[-1] instead
-        key = p.parts[-1]
-        if not key.endswith("/"):
-            key += "/"
-        key = shlex.quote(key) if " " in key else key
-        path_dict[key] = p
+        comp_line = self.comp_line
+        cmd_args = comp_line[len(command) + 1:]
 
-    # Return the KEY to the paths that match the arguments
-    matches = {s for s in path_dict.keys() if s.startswith(cmd_args)}
+        # Map path parts to parent paths, prioritizing things closer to the end as
+        # keys.
+        path_dict = {}
+        for p in reversed(paths):
+            # p.stem returns "" for a path of "/", so we use p.parts[-1] instead
+            key = p.parts[-1]
+            if not key.endswith("/"):
+                key += "/"
+            key = shlex.quote(key) if " " in key else key
+            path_dict[key] = p
 
-    # But if it's been narrowed down, return the full path
-    if len(matches) == 1:
-        matches = {str(path_dict[matches.pop()])}
+        # Return the KEY to the paths that match the arguments
+        matches = {s for s in path_dict.keys() if s.startswith(cmd_args)}
 
-    return matches
+        # But if it's been narrowed down, return the full path
+        if len(matches) == 1:
+            matches = {str(path_dict[matches.pop()])}
+
+        return matches
 
 
 if __name__ == "__main__":
-    completion_hook()
+    CompleteUp().main()

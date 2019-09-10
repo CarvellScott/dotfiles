@@ -31,10 +31,8 @@ def set_wd_test_data(data):
     os.environ[TEST_DATA_KEY] = data
 
 
-class CompletionTestCaseWarpDir(unittest.TestCase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.exe = __file__
+class CompletionTestCaseWarpDir(completion_utils.CompletionTestCase):
+    exe = __file__
 
     def setUp(self):
         set_wd_test_data(sample_lsof_out)
@@ -47,8 +45,7 @@ class CompletionTestCaseWarpDir(unittest.TestCase):
             "/mnt/c/Users/Carvell",
             "/home/cscott/dotfiles/completions"
         }
-        stdout = completion_utils.bash_complete(comp_line, self.exe)
-        actual = set(stdout.splitlines())
+        actual = self.get_completions(comp_line)
         home = str(pathlib.Path.home())
         cwd = str(pathlib.Path.cwd().absolute())
         expected -= {home, cwd}
@@ -58,45 +55,47 @@ class CompletionTestCaseWarpDir(unittest.TestCase):
         assert expected.intersection(actual) == expected, err
 
 
-@completion_utils.bash_completion_decorator
-def completion_hook(cmd, curr_word, prev_word):
-    matches = []
-    # If you set this environment variable, outside of the test case above that
-    # does so, you deserve whatever happens to you.
+class CompleteWarpDir(completion_utils.BashCompletion):
+    completion_test_case = CompletionTestCaseWarpDir
 
-    line = None
-    if TEST_DATA_KEY in os.environ:
-        lines = get_wd_test_data().strip().splitlines()
-    else:
-        # To get a list of the working directory for every terminal you have
-        # open, this is the closest you can get
-        finished_process = subprocess.run(
-            ["/usr/bin/lsof", "-a", "-d", "cwd", "-F", "-c", "bash"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True
-        )
+    def completion_hook(self, cmd, curr_word, prev_word):
+        matches = []
+        # If you set this environment variable, outside of the test case above that
+        # does so, you deserve whatever happens to you.
 
-        lines = finished_process.stdout.strip().splitlines()
+        line = None
+        if TEST_DATA_KEY in os.environ:
+            lines = get_wd_test_data().strip().splitlines()
+        else:
+            # To get a list of the working directory for every terminal you have
+            # open, this is the closest you can get
+            finished_process = subprocess.run(
+                ["/usr/bin/lsof", "-a", "-d", "cwd", "-F", "-c", "bash"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True
+            )
 
-    # All directories from the lsof command come prepended with "n".
-    # Isolate the directories and put them into a set.
-    paths = {_[1:] for _ in lines if _.startswith("n")}
+            lines = finished_process.stdout.strip().splitlines()
 
-    # Remove home and current directory. You're either already there or
-    # they're easy to cd to.
-    home = str(pathlib.Path.home())
-    cwd = str(pathlib.Path.cwd().absolute())
-    paths -= {home, cwd}
+        # All directories from the lsof command come prepended with "n".
+        # Isolate the directories and put them into a set.
+        paths = {_[1:] for _ in lines if _.startswith("n")}
 
-    # Finally, match against the line we were given.
-    comp_line = os.environ["COMP_LINE"]
-    cmd_args = comp_line[len(cmd) + 1:]
-    matches = {_ for _ in paths if _.startswith(cmd_args)}
+        # Remove home and current directory. You're either already there or
+        # they're easy to cd to.
+        home = str(pathlib.Path.home())
+        cwd = str(pathlib.Path.cwd().absolute())
+        paths -= {home, cwd}
 
-    # Return the path if it's been narrowed down.
-    return matches
+        # Finally, match against the line we were given.
+        comp_line = os.environ["COMP_LINE"]
+        cmd_args = comp_line[len(cmd) + 1:]
+        matches = {_ for _ in paths if _.startswith(cmd_args)}
+
+        # Return the path if it's been narrowed down.
+        return matches
 
 
 if __name__ == "__main__":
-    completion_hook()
+    CompleteWarpDir().main()
