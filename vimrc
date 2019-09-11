@@ -65,6 +65,7 @@ au BufNewFile,BufRead *.py set textwidth=79
 au BufNewFile,BufRead *.py set expandtab
 au BufNewFile,BufRead *.py set autoindent
 au BufNewFile,BufRead *.py set fileformat=unix
+au BufNewFile,BufRead tags set fileencoding=utf-8
 " Make it so we can use system clipboard like a normal text editor
 set clipboard=unnamedplus
 nnoremap <F3> :set invnumber<Enter><F2>
