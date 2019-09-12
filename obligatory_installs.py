@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
+import argparse
 import pathlib
 import subprocess
 
+# TODO: Redo this file, taking more of a "build every file dynamically"
+# approach. Specifically, it should accept a technology stack as a parameter
+# and build config files as appropriate. For example, if "git" is supplied,
+# the prompt is adjusted to include $(__git_ps1).
 
 def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
@@ -62,6 +67,16 @@ def symlink_bin():
             symlink_path.symlink_to(target)
             symlink_path.chmod(0o777)
 
+def handle_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "tech_stack",
+        nargs="+",
+        choices={"git", "make", "hg"},
+        type=str
+    )
+    args = parser.parse_args()
+    print(args)
 
 def main():
     append_to_profile()

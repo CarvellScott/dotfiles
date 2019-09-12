@@ -2,6 +2,7 @@
 import pathlib
 import os
 import unittest
+import shutil
 import subprocess
 
 try:
@@ -70,7 +71,7 @@ class CompleteWarpDir(completion_utils.BashCompletion):
             # To get a list of the working directory for every terminal you have
             # open, this is the closest you can get
             finished_process = subprocess.run(
-                ["/usr/bin/lsof", "-a", "-d", "cwd", "-F", "-c", "bash"],
+                [shutil.which("lsof"), "-a", "-d", "cwd", "-F", "-c", "bash"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True
