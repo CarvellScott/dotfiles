@@ -1,0 +1,4 @@
+# Jump around directories a lot easier
+if test "${PS1+set}"; then
+    CDPATH=.:~:..
+fi

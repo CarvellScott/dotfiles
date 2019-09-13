@@ -1,15 +1,5 @@
-# Jump around directories a lot easier
-if test "${PS1+set}"; then
-    CDPATH=.:~:..
-fi
-
-# Jump to directory by name alone. This should be on by default
-shopt -s autocd
-
-# Common profile parts
 . $HOME/dotfiles/common_profile_parts/v
 . $HOME/dotfiles/common_profile_parts/pip_completion
 . $HOME/dotfiles/common_profile_parts/python_completions
-
-# Cool-looking prompt
-export PS1="\[\033[38;5;1m\]\u@\[\033[38;5;247m\]\h\[\033[38;5;15m\]:\w\$ "
+. $HOME/dotfiles/common_profile_parts/cool_prompt
+. $HOME/dotfiles/common_profile_parts/cdpath_jumps

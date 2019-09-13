@@ -82,7 +82,7 @@ nnoremap <F7> :!python3 -m doctest "%:p" <Enter>
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");flake8 $(basename "%:p")<Enter>
 nnoremap <F9> :%!python3 -m json.tool --sort-keys<Enter>"
-nnoremap <F10> ggO#!/usr/bin/env python3<Enter><Esc>Gidef main():<Enter>pass<Enter><Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
+nnoremap <F10> ggO#!/usr/bin/env python3<Enter><Esc>Godef main():<Enter>pass<Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
 imap <C-l> OC
 imap <C-h> OD
 imap <C-j> OB
