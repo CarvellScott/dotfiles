@@ -7,6 +7,7 @@
     co = "!vim ~/.gitconfig"
     df = "!f() { git difftool -d $1^ $1 ; } ; f"
     hooked = "!cp ~/dotfiles/githooks/* ./.git/hooks"
+    ignore-builder = "!$HOME/dotfiles/gitscripts/git_ignore_builder.py"
     l = log --graph --oneline --decorate
     ppp = "!$HOME/dotfiles/gitscripts/git_ppp.py | vi -"
     pytags = "!ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./"

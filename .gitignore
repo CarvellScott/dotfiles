@@ -1,0 +1,3 @@
+*.py[cdo]
+.*.sw?
+__py_cache__/
