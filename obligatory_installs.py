@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import argparse
+import cmd
 import pathlib
+import os
 import subprocess
 
 # TODO: Redo this file, taking more of a "build every file dynamically"
@@ -67,8 +69,33 @@ def symlink_bin():
             symlink_path.symlink_to(target)
             symlink_path.chmod(0o777)
 
+class ProfileComposerCmd(cmd.Cmd):
+    common_profile_parts = pathlib.Path.cwd() / "common_profile_parts"
+    def __init__(self):
+        super().__init__()
+        self.wip_profile = ""
+
+    def complete_include(self, text, line, begidx, endidx):
+        return [str(_.name) for _ in self.common_profile_parts.iterdir()]
+
+    def do_include(self, args):
+        print(", ".join(args))
+
+class PrintCompletionAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        print("complete -C {} {}".format(__file__, __file__))
+        parser.exit()
+
+
 def handle_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--bash-completion",
+        nargs=0,
+        action=PrintCompletionAction,
+        help="Print completion code for bash"
+    )
+
     parser.add_argument(
         "tech_stack",
         nargs="+",
@@ -78,7 +105,22 @@ def handle_args():
     args = parser.parse_args()
     print(args)
 
+
+def handle_completion():
+    if os.environ.get("COMP_LINE") and os.environ.get("COMP_POINT"):
+        parser = argparse.ArgumentParser()
+        completion_params = ("command", "curr_word", "prev_word")
+        for arg in completion_params:
+            parser.add_argument(arg, type=str)
+        args = parser.parse_args()
+        print(args.__dict__)
+        quit()
+
 def main():
+    handle_completion()
+    handle_args()
+    ProfileComposerCmd().cmdloop()
+    quit()
     append_to_profile()
     install_vundle()
     symlink_dotfiles()

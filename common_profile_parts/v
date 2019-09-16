@@ -1,3 +1,4 @@
+# Single-letter activation of venvs and autocompletion for them
 _v() {
     local cur=${COMP_WORDS[COMP_CWORD]}
     # Split working directory on instances of '/'
