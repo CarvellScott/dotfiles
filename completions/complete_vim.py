@@ -13,12 +13,11 @@ def _get_tags():
     tags_path = curr_path / "tags"
 
     # Search the current directory, then parent directories for tags file
-    if False:
-        if not tags_path.exists():
-            for parent in curr_path.absolute().parents:
-                tags_path = parent / "tags"
-                if tags_path.exists():
-                    break
+    if not tags_path.exists():
+        for parent in curr_path.absolute().parents:
+            tags_path = parent / "tags"
+            if tags_path.exists():
+                break
 
     # If the tags file exists, open it and build a sorted list of tags.
     if tags_path.exists():
