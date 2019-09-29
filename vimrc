@@ -96,6 +96,5 @@ nnoremap <C-K> :!cat % \| xclip -i -selection clipboard<Enter><Enter>
 "set t_Co=256
 "set t_ut=
 "colorscheme molokai
-colorscheme darkblue
-set background=dark
+colorscheme zellner
 set visualbell
