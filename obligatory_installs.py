@@ -60,7 +60,7 @@ def symlink_windows_user():
 
 
 def symlink_bin():
-    binaries = ["firefox", "xclip"]
+    binaries = ["firefox", "xclip", "v"]
     for bin_name in binaries:
         py_name = bin_name + ".py"
         symlink_path = pathlib.Path.home() / "bin" / bin_name
