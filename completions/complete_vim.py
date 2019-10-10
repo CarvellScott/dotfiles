@@ -38,8 +38,7 @@ def completion_hook(cmd, curr_word, prev_word):
         matches.append("-t")
 
     if prev_word == "-t":
-        potential_matches = _get_tags()
-        matches += [k for k in potential_matches if k.startswith(curr_word)]
+        matches = [k for k in _get_tags() if k.startswith(curr_word)]
     return matches
 
 

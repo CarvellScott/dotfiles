@@ -4,6 +4,7 @@ import pathlib
 import subprocess
 
 
+# TODO: Make use of .git/info/exclude?
 def find_gitignore():
     cwd = pathlib.Path.cwd()
     git_folder = None

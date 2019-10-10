@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 import argparse
 import cmd
+import json
 import pathlib
 import os
+import shutil
 import subprocess
+import sys
 
 # TODO: Redo this file, taking more of a "build every file dynamically"
 # approach. Specifically, it should accept a technology stack as a parameter
@@ -47,8 +50,11 @@ def symlink_dotfiles():
 
 
 def symlink_windows_user():
+    cmd_exe = shutil.which("cmd.exe")
+    if not cmd_exe:
+        return
     process = subprocess.run(
-        ["cmd.exe", "/c", "echo", "%username%"],
+        [cmd_exe, "/c", "echo", "%username%"],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         universal_newlines=True
     )
@@ -81,6 +87,9 @@ class ProfileComposerCmd(cmd.Cmd):
     def do_include(self, args):
         print(", ".join(args))
 
+    def do_EOF(self, args):
+        return True
+
 class PrintCompletionAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         print("complete -C {} {}".format(__file__, __file__))
@@ -97,29 +106,38 @@ def handle_args():
     )
 
     parser.add_argument(
-        "tech_stack",
-        nargs="+",
-        choices={"git", "make", "hg"},
-        type=str
+        "--tech-stack",
+        action="store_true"
     )
     args = parser.parse_args()
-    print(args)
+    return args
 
+def detect_tech_stack():
+    summary = {}
+    commands = {"git", "make"}
+    for command in commands:
+        summary[command] = shutil.which(command)
+
+    return summary
 
 def handle_completion():
     if os.environ.get("COMP_LINE") and os.environ.get("COMP_POINT"):
         parser = argparse.ArgumentParser()
-        completion_params = ("command", "curr_word", "prev_word")
-        for arg in completion_params:
-            parser.add_argument(arg, type=str)
-        args = parser.parse_args()
-        print(args.__dict__)
+        command, curr_word, prev_word = sys.argv[1:]
+        matches = None
+        if prev_word == command:
+            matches = ["--tech-stack"]
+        if matches:
+            matches = [k for k in matches if k.startswith(curr_word)]
+            print("\n".join(matches))
         quit()
 
 def main():
     handle_completion()
-    handle_args()
-    ProfileComposerCmd().cmdloop()
+    args = handle_args()
+    if args.tech_stack:
+        tech_stack = detect_tech_stack()
+        print(json.dumps(tech_stack, sort_keys=True, indent=4))
     quit()
     append_to_profile()
     install_vundle()
