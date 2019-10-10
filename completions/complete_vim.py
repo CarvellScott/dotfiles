@@ -31,16 +31,16 @@ def _get_tags():
     return tags
 
 
-@completion_utils.bash_completion_decorator
-def completion_hook(cmd, curr_word, prev_word):
-    matches = []
-    if curr_word.startswith("-"):
-        matches.append("-t")
+class CompleteVim(completion_utils.BashCompletion):
+    def completion_hook(self, cmd, curr_word, prev_word):
+        matches = []
+        if curr_word.startswith("-"):
+            matches.append("-t")
 
-    if prev_word == "-t":
-        matches = [k for k in _get_tags() if k.startswith(curr_word)]
-    return matches
+        if prev_word == "-t":
+            matches = [k for k in _get_tags() if k.startswith(curr_word)]
+        return matches
 
 
 if __name__ == "__main__":
-    completion_hook()
+    CompleteVim().main()

@@ -40,24 +40,24 @@ class CompletionTestCase_xclip(unittest.TestCase):
         self.assert_completion(comp_line=comp_line, expected=expected)
 
 
-@completion_utils.bash_completion_decorator
-def completion_hook(cmd, curr_word, prev_word):
-    potential_matches = []
-    # Complete command options. The single-letter commands all start with the
-    # same as their more verbose equivalents.
-    if curr_word.startswith("-") or not curr_word:
-        potential_matches = [
-            "-in", "-out", "-loops", "-display", "-help", "-selection",
-            "-noutf8", "-target", "-version", "-silent", "-quiet", "-verbose"
-        ]
+class CompleteXClip(completion_utils.BashCompletion):
+    def completion_hook(self, cmd, curr_word, prev_word):
+        potential_matches = []
+        # Complete command options. The single-letter commands all start with the
+        # same as their more verbose equivalents.
+        if curr_word.startswith("-") or not curr_word:
+            potential_matches = [
+                "-in", "-out", "-loops", "-display", "-help", "-selection",
+                "-noutf8", "-target", "-version", "-silent", "-quiet", "-verbose"
+            ]
 
-    # Complete options for selection.
-    if prev_word == "-selection":
-        potential_matches = ["buffer-cut", "clipboard", "primary", "secondary"]
+        # Complete options for selection.
+        if prev_word == "-selection":
+            potential_matches = ["buffer-cut", "clipboard", "primary", "secondary"]
 
-    matches = [k for k in potential_matches if k.startswith(curr_word)]
-    return matches
+        matches = [k for k in potential_matches if k.startswith(curr_word)]
+        return matches
 
 
 if __name__ == "__main__":
-    completion_hook()
+    CompleteXClip().main()
