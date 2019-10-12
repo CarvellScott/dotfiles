@@ -53,7 +53,9 @@ class CompleteXClip(completion_utils.BashCompletion):
 
         # Complete options for selection.
         if prev_word == "-selection":
-            potential_matches = ["buffer-cut", "clipboard", "primary", "secondary"]
+            potential_matches = [
+                "buffer-cut", "clipboard", "primary", "secondary"
+            ]
 
         matches = [k for k in potential_matches if k.startswith(curr_word)]
         return matches

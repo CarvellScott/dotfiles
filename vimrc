@@ -80,7 +80,7 @@ nnoremap <F5> :!cd $(dirname "%:p");"%:p"<Enter>
 nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
 nnoremap <F7> :!python3 -m doctest "%:p" <Enter>
 " Run flake8 check on the file.
-nnoremap <F8> :!cd $(dirname "%:p");flake8 $(basename "%:p")<Enter>
+nnoremap <F8> :!cd $(dirname "%:p");autopep8 -d $(basename "%:p")<Enter>
 nnoremap <F9> :%!python3 -m json.tool --sort-keys<Enter>"
 nnoremap <F10> ggO#!/usr/bin/env python3<Enter><Esc>Godef main():<Enter>pass<Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
 imap <C-l> OC

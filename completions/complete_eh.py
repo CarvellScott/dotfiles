@@ -14,7 +14,7 @@ def completion_hook(cmd, curr_word, prev_word):
 def main():
     results = completion_hook(*sys.argv[1:])
     if len(results):
-          print("\n".join(results))
+        print("\n".join(results))
 
 
 if __name__ == "__main__":

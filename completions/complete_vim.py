@@ -7,6 +7,7 @@ try:
 except (ImportError, ModuleNotFoundError):
     import df_completion_utils as completion_utils
 
+
 def _get_tags():
     tags = []
     curr_path = pathlib.Path()
