@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import pathlib
 import re
+import sys
 
 try:
     import completion_utils
@@ -32,16 +33,10 @@ def _get_tags():
     return tags
 
 
-class CompleteVim(completion_utils.BashCompletion):
+class CompleteTags(completion_utils.BashCompletion):
     def completion_hook(self, cmd, curr_word, prev_word):
-        matches = []
-        if curr_word.startswith("-"):
-            matches.append("-t")
-
-        if prev_word == "-t":
-            matches = [k for k in _get_tags() if k.startswith(curr_word)]
+        matches = [k for k in _get_tags() if k.startswith(curr_word)]
         return matches
 
-
 if __name__ == "__main__":
-    CompleteVim().main()
+    CompleteTags().main()

@@ -1,4 +1,5 @@
 complete -C $HOME/dotfiles/completions/complete_xclip.py xclip
-complete -o default -C $HOME/dotfiles/completions/complete_vim.py vim
+complete -C $HOME/dotfiles/completions/complete_tags.py vit
+complete -C $HOME/dotfiles/completions/complete_tags.py tgrep
 complete -C $HOME/dotfiles/completions/complete_up.py up
 complete -C $HOME/dotfiles/completions/complete_wd.py wd
