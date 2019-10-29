@@ -67,9 +67,12 @@ def symlink_windows_user():
 
 def symlink_bin():
     binaries = ["firefox", "xclip", "v"]
+    bin_path = pathlib.Path.home() / "bin"
+    if not bin_path.exists():
+        bin_path.mkdir(parents=True)
     for bin_name in binaries:
         py_name = bin_name + ".py"
-        symlink_path = pathlib.Path.home() / "bin" / bin_name
+        symlink_path = bin_path / bin_name
         if not symlink_path.exists():
             target = pathlib.Path().home() / "dotfiles" / py_name
             symlink_path.symlink_to(target)
@@ -134,11 +137,12 @@ def handle_completion():
 
 def main():
     handle_completion()
-    args = handle_args()
-    if args.tech_stack:
-        tech_stack = detect_tech_stack()
-        print(json.dumps(tech_stack, sort_keys=True, indent=4))
-    quit()
+    if False:
+        args = handle_args()
+        if args.tech_stack:
+            tech_stack = detect_tech_stack()
+            print(json.dumps(tech_stack, sort_keys=True, indent=4))
+        quit()
     append_to_profile()
     install_vundle()
     symlink_dotfiles()
