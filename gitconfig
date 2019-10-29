@@ -20,3 +20,5 @@
     smc = "!$HOME/dotfiles/gitscripts/git_smart_commit.py"
     todos = "!$HOME/dotfiles/gitscripts/git_todos.py"
     #TODO: A git hook that calls make <something> if code changes that is supposed to update something
+[diff]
+    tool = vimdiff

@@ -53,8 +53,11 @@ set encoding=utf-8
 set incsearch
 set hlsearch
 set tags=./tags;
-set number " show line numbers in vim
 set pastetoggle=<F2>
+" show line numbers
+set number 
+" Make it so we can use system clipboard like a normal text editor
+set clipboard=unnamedplus
 
 let python_highlight_all=1
 syntax on
@@ -66,8 +69,8 @@ au BufNewFile,BufRead *.py set expandtab
 au BufNewFile,BufRead *.py set autoindent
 au BufNewFile,BufRead *.py set fileformat=unix
 au BufNewFile,BufRead tags set fileencoding=utf-8
-" Make it so we can use system clipboard like a normal text editor
-set clipboard=unnamedplus
+
+"""""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
 " Run the file in python's interactive mode, importing it as a module
 nnoremap <F4> :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
@@ -82,9 +85,9 @@ nnoremap <F7> :!python3 -m doctest "%:p" <Enter>
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");autopep8 -d $(basename "%:p")<Enter>
 nnoremap <F9> :%!python3 -m json.tool --sort-keys<Enter>"
-iabbrev pyinvocation #!/usr/bin/env python
-iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_word = sys.argv[1:]<Enter>
-iabbrev pymain def main():<Enter>pass<Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
+
+nnoremap <C-K> :!cat % \| xclip -i -selection clipboard<Enter><Enter>
+
 "imap <C-l> OC
 "imap <C-h> OD
 "imap <C-j> OB
@@ -94,9 +97,21 @@ iabbrev pymain def main():<Enter>pass<Enter><Enter>if __name__ == "__main__":<En
 nmap <leader>e :e **/
 map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
-nnoremap <C-K> :!cat % \| xclip -i -selection clipboard<Enter><Enter>
-"set t_Co=256
-"set t_ut=
-"colorscheme molokai
+
+"""""""""" ABBREVIATIONS """"""""""
+iabbrev pyinvocation #!/usr/bin/env python
+iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_word = sys.argv[1:]<Enter>
+iabbrev pymain def main():<Enter>pass<Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
+
+"""""""""" COMMANDS """"""""""
+command OScopy !cat % | xclip
 colorscheme zellner
 set visualbell
+
+if &diff
+    syntax off
+    hi DiffAdd      cterm=none ctermfg=2 ctermbg=none
+    hi DiffDelete   cterm=none ctermfg=1 ctermbg=none
+    hi DiffText     cterm=none ctermfg=3 ctermbg=none
+    hi DiffChange   cterm=bold ctermfg=3 ctermbg=none
+endif
