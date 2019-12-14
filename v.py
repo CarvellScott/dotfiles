@@ -8,10 +8,11 @@ import sys
 def handle_completion():
     if os.environ.get("COMP_LINE") and os.environ.get("COMP_POINT"):
         command, curr_word, prev_word = sys.argv[1:]
-        p = pathlib.Path.home() / "venvs"
-        dirs = [_.name for _ in p.iterdir()]
-        words = [_ for _ in dirs if _.startswith(curr_word)]
-        print("\n".join(words))
+        if prev_word == command:
+            p = pathlib.Path.home() / "venvs"
+            dirs = [_.name for _ in p.iterdir()]
+            words = [_ for _ in dirs if _.startswith(curr_word)]
+            print("\n".join(words))
         quit()
 
 

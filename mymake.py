@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+import os
 import pathlib
-import tempfile
+import re
 import shlex
 import subprocess
-import os
 import sys
+import tempfile
 
 
 def _get_fused_makefile_text():
@@ -35,7 +36,7 @@ def _get_fused_makefile_text():
 def main():
     # Read list of files to fuse together.
     fused_makefile_text = _get_fused_makefile_text()
-    print(fused_makefile_text)
+    # print(fused_makefile_text)
     if "COMP_LINE" in os.environ:
         command, curr_word, prev_word = sys.argv[1:]
         lines = fused_makefile_text.splitlines()
@@ -43,7 +44,7 @@ def main():
         lines = filter(lambda _: bool(_), lines)
         lines = map(lambda _: _.group(1), lines)
         lines = filter(lambda _: not _.startswith("."), lines)
-        matches = {_ for _ in targets if _.startswith(curr_word)}
+        matches = {_ for _ in lines if _.startswith(curr_word)}
         if matches:
             print("\n".join(matches))
         quit()
