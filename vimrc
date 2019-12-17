@@ -69,6 +69,7 @@ au BufNewFile,BufRead *.py set expandtab
 au BufNewFile,BufRead *.py set autoindent
 au BufNewFile,BufRead *.py set fileformat=unix
 au BufNewFile,BufRead tags set fileencoding=utf-8
+au BufNewFile,BufRead *.py set keywordprg=pydoc3
 
 """""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
@@ -78,15 +79,16 @@ nnoremap <F4> :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
 " nnoremap <F5> :!cd $(dirname "%:p"); python3 -m %:t:r<Enter>
 " Use this version for ANY executable:
 nnoremap <F5> :!cd $(dirname "%:p");"%:p"<Enter>
-
 " Run the file assuming it's a bunch of unittests
 nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
 nnoremap <F7> :!python3 -m doctest "%:p" <Enter>
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");autopep8 -d $(basename "%:p")<Enter>
+" Clean and pretty-print JSON
 nnoremap <F9> :%!python3 -m json.tool --sort-keys<Enter>"
-
 nnoremap <C-K> :!cat % \| xclip -i -selection clipboard<Enter><Enter>
+" Make ctags auto-prompt for duplicate tags
+nnoremap <C-]> :execute 'tj' expand('<cword>')<CR>zv
 
 "imap <C-l> OC
 "imap <C-h> OD
