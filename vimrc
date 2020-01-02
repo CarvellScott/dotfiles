@@ -101,7 +101,7 @@ map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
 
 """""""""" ABBREVIATIONS """"""""""
-iabbrev pyinvocation #!/usr/bin/env python
+iabbrev pyinvocation #!/usr/bin/env python3
 iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_word = sys.argv[1:]<Enter>
 iabbrev pymain def main():<Enter>pass<Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
 
