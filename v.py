@@ -19,19 +19,22 @@ def handle_completion():
 def main():
     handle_completion()
     venv_name = sys.argv[1]
-    venv_path = pathlib.Path.home() / "venvs" / venv_name / "bin" / "activate"
-    venv_path = str(venv_path)
+    venvs_path = pathlib.Path.home() / "venvs"
+    venv_path = venvs_path / venv_name
+    venv_activate  = venv_path / "bin" / "activate"
+    if not venv_path.exists():
+        raise Exception("venv {} does not exist".format(str(venv_path)))
+    venv_activate = str(venv_activate)
     # Create the fused file and execute
     tmp_rc_content = (
         "#!/bin/bash\n"
         "source ~/.profile\n"
-        "source {venv_path}\n"
+        "source {venv_activate}\n"
     ).format(**locals())
     with tempfile.NamedTemporaryFile("w+") as named_file:
         named_file.write(tmp_rc_content)
         named_file.seek(0)
 
-        print(named_file.name, file=sys.stderr)
         command = ["/bin/bash", "--rcfile", named_file.name]
         p = subprocess.Popen(command)
         p.communicate()
