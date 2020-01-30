@@ -1,4 +1,4 @@
-. $HOME/dotfiles/common_profile_parts/pip_completion
+#. $HOME/dotfiles/common_profile_parts/pip_completion
 . $HOME/dotfiles/common_profile_parts/python_completions
 . $HOME/dotfiles/common_profile_parts/cool_prompt
 . $HOME/dotfiles/common_profile_parts/cdpath_jumps

@@ -14,6 +14,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'ervandew/supertab'
 Plugin 'calviken/vim-gdscript3'
+Plugin 'metakirby5/codi.vim'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -46,6 +47,7 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+
 set tabstop=4
 set shiftwidth=4
 set expandtab
@@ -58,6 +60,9 @@ set pastetoggle=<F2>
 set number 
 " Make it so we can use system clipboard like a normal text editor
 set clipboard=unnamedplus
+" Make vertical splits look good at least
+set fillchars+=vert:│
+hi VertSplit cterm=none ctermfg=none ctermbg=none
 
 let python_highlight_all=1
 syntax on
