@@ -55,7 +55,12 @@ def main():
         named_file.seek(0)
 
         command = ["make", "-f", named_file.name] + sys.argv[1:]
-        p = subprocess.Popen(command)
+        p = subprocess.Popen(
+            command,
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=None
+        )
         p.communicate()
 
     #print(p.stdout.read())
