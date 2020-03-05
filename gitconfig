@@ -9,6 +9,7 @@
     hooked = "!cp ~/dotfiles/githooks/* ./.git/hooks"
     ignore-builder = "!$HOME/dotfiles/gitscripts/git_ignore_builder.py"
     l = log --graph --oneline --decorate
+    patchlog = log --reverse -p
     ppp = "!$HOME/dotfiles/gitscripts/git_ppp.py | vi -"
     pytags = "!ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./"
     s = status -suno
