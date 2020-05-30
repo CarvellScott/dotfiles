@@ -75,6 +75,8 @@ au BufNewFile,BufRead *.py set autoindent
 au BufNewFile,BufRead *.py set fileformat=unix
 au BufNewFile,BufRead tags set fileencoding=utf-8
 au BufNewFile,BufRead *.py set keywordprg=pydoc3
+"au BufNewFile,BufRead *.py set makeprg=%:p
+"au BufNewFile,BufRead *.py set makeef=/dev/null
 
 """""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
@@ -122,3 +124,4 @@ if &diff
     hi DiffText     cterm=none ctermfg=3 ctermbg=none
     hi DiffChange   cterm=bold ctermfg=3 ctermbg=none
 endif
+let g:codi#width=40
