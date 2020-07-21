@@ -75,6 +75,7 @@ au BufNewFile,BufRead *.py set autoindent
 au BufNewFile,BufRead *.py set fileformat=unix
 au BufNewFile,BufRead tags set fileencoding=utf-8
 au BufNewFile,BufRead *.py set keywordprg=pydoc3
+au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
 "au BufNewFile,BufRead *.py set makeprg=%:p
 "au BufNewFile,BufRead *.py set makeef=/dev/null
 
@@ -108,9 +109,7 @@ map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
 
 """""""""" ABBREVIATIONS """"""""""
-iabbrev pyinvocation #!/usr/bin/env python3
 iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_word = sys.argv[1:]<Enter>
-iabbrev pymain def main():<Enter>pass<Enter><Enter>if __name__ == "__main__":<Enter>main()<Esc>
 
 """""""""" COMMANDS """"""""""
 command OScopy !cat % | xclip

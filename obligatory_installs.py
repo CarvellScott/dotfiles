@@ -13,6 +13,12 @@ import sys
 # and build config files as appropriate. For example, if "git" is supplied,
 # the prompt is adjusted to include $(__git_ps1).
 
+# TODO: Write the line 'set bell-style none' to ~/.inputrc or /etc/inputrc 
+# to silence bell
+
+# apt installs:
+# build-essential ctags python3-dev tmux ffmpeg
+
 def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
     profile_appendix_added = False
@@ -37,6 +43,11 @@ def install_vundle():
             subprocess.check_call(command)
         except subprocess.CalledProcessError as e:
             raise e
+
+def copy_vim_templates():
+    source = pathlib.Path.cwd() / "vim" / "templates"
+    destination = pathlib.Path.home() / ".vim" / "templates"
+    shutil.copytree(str(source), str(destination), dirs_exist_ok=True)
 
 def symlink_dotfiles():
     dotfiles = ["bash_aliases", "dircolors", "gitconfig", "tmux.conf", "vimrc"]
@@ -148,6 +159,7 @@ def main():
     symlink_dotfiles()
     symlink_windows_user()
     symlink_bin()
+    copy_vim_templates()
 
 
 if __name__ == "__main__":
