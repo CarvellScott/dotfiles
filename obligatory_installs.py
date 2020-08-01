@@ -13,9 +13,6 @@ import sys
 # and build config files as appropriate. For example, if "git" is supplied,
 # the prompt is adjusted to include $(__git_ps1).
 
-# TODO: Write the line 'set bell-style none' to ~/.inputrc or /etc/inputrc 
-# to silence bell
-
 # apt installs:
 # build-essential ctags python3-dev tmux ffmpeg
 
@@ -89,6 +86,12 @@ def symlink_bin():
             symlink_path.symlink_to(target)
             symlink_path.chmod(0o777)
 
+def silence_bell():
+    inputrc = pathlib.Path.home() / ".inputrc"
+    with open(inputrc, "w") as f:
+        f.write("set bell-style none")
+
+
 class ProfileComposerCmd(cmd.Cmd):
     common_profile_parts = pathlib.Path.cwd() / "common_profile_parts"
     def __init__(self):
@@ -160,6 +163,7 @@ def main():
     symlink_windows_user()
     symlink_bin()
     copy_vim_templates()
+    silence_bell()
 
 
 if __name__ == "__main__":
