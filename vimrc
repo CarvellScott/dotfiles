@@ -76,8 +76,7 @@ au BufNewFile,BufRead *.py set fileformat=unix
 au BufNewFile,BufRead tags set fileencoding=utf-8
 au BufNewFile,BufRead *.py set keywordprg=pydoc3
 au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
-"au BufNewFile,BufRead *.py set makeprg=%:p
-"au BufNewFile,BufRead *.py set makeef=/dev/null
+au BufWritePost *.vimrc :so %
 
 """""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
@@ -103,7 +102,7 @@ nnoremap <C-]> :execute 'tj' expand('<cword>')<CR>zv
 "imap <C-j> OB
 "imap <C-k> OA
 
-" ,e to fast find files
+"\e to edit whatever file is found via recursive search in current directory
 nmap <leader>e :e **/
 map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
@@ -113,6 +112,9 @@ iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_wo
 
 """""""""" COMMANDS """"""""""
 command OScopy !cat % | xclip
+command RUN :w !python3
+command EVIMRC :e $HOME/.vimrc
+command SOVIMRC :so $HOME/.vimrc
 colorscheme zellner
 set visualbell
 
@@ -123,4 +125,7 @@ if &diff
     hi DiffText     cterm=none ctermfg=3 ctermbg=none
     hi DiffChange   cterm=bold ctermfg=3 ctermbg=none
 endif
+" Allow gx to open links in browser
+let g:netrw_browsex_viewer='firefox'
 let g:codi#width=40
+set vb t_vb=     " no visual bell & flash
