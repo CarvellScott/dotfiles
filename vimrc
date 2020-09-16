@@ -76,7 +76,9 @@ au BufNewFile,BufRead *.py set fileformat=unix
 au BufNewFile,BufRead tags set fileencoding=utf-8
 au BufNewFile,BufRead *.py set keywordprg=pydoc3
 au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
+au BufNewFile,BufRead *.mcmeta set filetype=json
 au BufWritePost *.vimrc :so %
+au BufWritePost *.dot :!dot -Tpng % > %:r.png
 
 """""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
@@ -113,8 +115,12 @@ iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_wo
 """""""""" COMMANDS """"""""""
 command OScopy !cat % | xclip
 command RUN :w !python3
+command! -range=% RUNLINES :<line1>,<line2>!python3
 command EVIMRC :e $HOME/.vimrc
 command SOVIMRC :so $HOME/.vimrc
+command! -range=% JSONTIDY :<line1>,<line2>!python3 -m json.tool --sort-keys
+" Requires sudo apt install graphviz
+command DOTRENDER !dot -Tpng % > graph.png
 colorscheme zellner
 set visualbell
 
@@ -129,3 +135,4 @@ endif
 let g:netrw_browsex_viewer='firefox'
 let g:codi#width=40
 set vb t_vb=     " no visual bell & flash
+let g:markdown_fenced_languages = ['diff', 'html', 'json', 'python']
