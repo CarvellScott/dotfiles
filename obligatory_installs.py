@@ -14,8 +14,11 @@ import sys
 # the prompt is adjusted to include $(__git_ps1).
 
 # apt installs:
-# build-essential ctags python3-dev tmux ffmpeg
+# build-essential ctags python3-dev tmux ffmpeg tree
 
+# apt installs that are useful, but have lots of dependencies:
+# graphviz
+# 	Deps: fonts-liberation graphviz libann0 libcdt5 libcgraph6 libgd3 libgts-0.7-5 libgts-bin libgvc6 libgvpr2 liblab-gamut1 libpathplan4
 def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
     profile_appendix_added = False

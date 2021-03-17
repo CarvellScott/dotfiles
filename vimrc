@@ -79,7 +79,6 @@ au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
 au BufNewFile,BufRead *.mcmeta set filetype=json
 au BufWritePost *.vimrc :so %
 au BufWritePost *.dot :!dot -Tpng % > %:r.png
-
 """""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
 " Run the file in python's interactive mode, importing it as a module
@@ -120,7 +119,7 @@ command EVIMRC :e $HOME/.vimrc
 command SOVIMRC :so $HOME/.vimrc
 command! -range=% JSONTIDY :<line1>,<line2>!python3 -m json.tool --sort-keys
 " Requires sudo apt install graphviz
-command DOTRENDER !dot -Tpng % > graph.png
+command DotRender !dot -Tpng % > %:r.png
 colorscheme zellner
 set visualbell
 
