@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import itertools
 import json
 import re
 import subprocess
@@ -28,19 +29,16 @@ def get_todos(filename):
         details = lines[i * lpe:i * lpe + lpe]
         (commit, author, author_mail, author_time, author_tz,
          commiter, commiter_mail, committer_time, commiter_tz,
-         summary, filename, code) = details
+         summary, commit_filename, code) = details
 
-        todo = re.search(r"#.*TODO.*", code)
-        #TODO: FIRST_NAME in author and LAST_NAME in author
-        search_criteria_met = True
+        todo = re.search(r"# ?TODO.*", code)
         if todo:
-            if search_criteria_met or "Not Committed Yet" in author:
-                todos_for_file += [{
-                    "author_mail": author_mail[author_mail.find(" ") + 1:],
-                    "line": commit.split()[2],
-                    "filename": filename.split()[1],
-                    "todo": todo.group(0)
-                }]
+            todos_for_file += [{
+                "author_mail": author_mail[author_mail.find(" ") + 1:],
+                "line": commit.split()[2],
+                "filename": filename,
+                "todo": todo.group(0)
+            }]
     return todos_for_file
 
 
@@ -54,15 +52,12 @@ def main():
     )
 
     file_list = [l for l in p.stdout.strip().splitlines() if l]
-    file_list = list(set(file_list))
     todos_per_file = map(get_todos, file_list)
     todos_per_file = filter(lambda i: i, todos_per_file)
-    todos = []
-    for i in todos_per_file:
-        todos.extend(i)
-    template = "{todo} @{filename} +{line}"
+    todos = itertools.chain(*todos_per_file)
+    template = "{filename}:{line}: {todo}"
+    # TODO: Add an option to sort TODOs by age?
     todos = map(lambda i: template.format(**i), todos)
-    todos = list(todos)
     print("\n".join(todos))
 
 
