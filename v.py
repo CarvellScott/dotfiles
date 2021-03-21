@@ -4,6 +4,7 @@ import tempfile
 import subprocess
 import os
 import sys
+import venv
 
 def handle_completion():
     if os.environ.get("COMP_LINE") and os.environ.get("COMP_POINT"):
@@ -23,7 +24,12 @@ def main():
     venv_path = venvs_path / venv_name
     venv_activate  = venv_path / "bin" / "activate"
     if not venv_path.exists():
-        raise Exception("venv {} does not exist".format(str(venv_path)))
+        msg = "venv {} does not exist".format(str(venv_path))
+        if sys.stdin.isatty():
+            print(msg)
+            create_venv = input("Create it? (y/n)")
+            if "y" in create_venv:
+                venv.create(venv_path)
     venv_activate = str(venv_activate)
     # Create the fused file and execute
     tmp_rc_content = (
