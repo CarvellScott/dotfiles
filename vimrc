@@ -1,53 +1,14 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+" Function to source only if file exists
+function! SourceIfExists(file)
+  if filereadable(expand(a:file))
+    exe 'source' a:file
+  endif
+endfunction
+call SourceIfExists("~/dotfiles/vundle_boilerplate.vimrc")
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'kien/ctrlp.vim'
-Plugin 'Vimjas/vim-python-pep8-indent'
-Plugin 'ervandew/supertab'
-Plugin 'calviken/vim-gdscript3'
-Plugin 'metakirby5/codi.vim'
-
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-"Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-"Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
+" Use the iMproved version of vi. We're not in the 70s anymore.
+set nocompatible
+" General opinionated imiprovements
 set tabstop=4
 set shiftwidth=4
 set expandtab
@@ -62,6 +23,7 @@ set number
 set clipboard=unnamedplus
 " Make vertical splits look good at least
 set fillchars+=vert:│
+set wildignore+=*.pyc
 hi VertSplit cterm=none ctermfg=none ctermbg=none
 
 let python_highlight_all=1
@@ -132,6 +94,7 @@ if &diff
 endif
 " Allow gx to open links in browser
 let g:netrw_browsex_viewer='firefox'
-let g:codi#width=40
 set vb t_vb=     " no visual bell & flash
 let g:markdown_fenced_languages = ['diff', 'html', 'json', 'python']
+
+call SourceIfExists("~/.vimrc.local")
