@@ -19,6 +19,9 @@ import sys
 # apt installs that are useful, but have lots of dependencies:
 # graphviz
 # 	Deps: fonts-liberation graphviz libann0 libcdt5 libcgraph6 libgd3 libgts-0.7-5 libgts-bin libgvc6 libgvpr2 liblab-gamut1 libpathplan4
+
+# TODO: Consider including .ssh keys, and making sure they have appropriate
+# permissions
 def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
     profile_appendix_added = False
@@ -77,17 +80,16 @@ def symlink_windows_user():
 
 
 def symlink_bin():
-    binaries = ["firefox", "xclip", "v"]
     bin_path = pathlib.Path.home() / "bin"
     if not bin_path.exists():
         bin_path.mkdir(parents=True)
-    for bin_name in binaries:
-        py_name = bin_name + ".py"
-        symlink_path = bin_path / bin_name
+    targets = pathlib.Path().home() / "dotfiles" / "bin"
+    for target in targets.iterdir():
+        symlink_path = bin_path / target.stem
         if not symlink_path.exists():
-            target = pathlib.Path().home() / "dotfiles" / py_name
             symlink_path.symlink_to(target)
             symlink_path.chmod(0o777)
+
 
 def silence_bell():
     inputrc = pathlib.Path.home() / ".inputrc"
@@ -95,20 +97,6 @@ def silence_bell():
         f.write("set bell-style none")
 
 
-class ProfileComposerCmd(cmd.Cmd):
-    common_profile_parts = pathlib.Path.cwd() / "common_profile_parts"
-    def __init__(self):
-        super().__init__()
-        self.wip_profile = ""
-
-    def complete_include(self, text, line, begidx, endidx):
-        return [str(_.name) for _ in self.common_profile_parts.iterdir()]
-
-    def do_include(self, args):
-        print(", ".join(args))
-
-    def do_EOF(self, args):
-        return True
 
 class PrintCompletionAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -152,7 +140,33 @@ def handle_completion():
             print("\n".join(matches))
         quit()
 
+
+class SymLinkerCmd(cmd.Cmd):
+    def __init__(self):
+        super().__init__()
+        self.prompt = "(SymLinker) "
+
+    def do_link_dotfiles(self, args):
+        symlink_dotfiles()
+
+    def do_link_windows_user(self, args):
+        symlink_windows_user()
+
+    def do_symlink_bin(self, args):
+        symlink_bin()
+
+    def complete_include(self, text, line, begidx, endidx):
+        return [str(_.name) for _ in self.common_profile_parts.iterdir()]
+
+    def do_include(self, args):
+        print(", ".join(args))
+
+    def do_EOF(self, args):
+        return True
+
 def main():
+    # It should be implied that you have git (needed to check this out)
+    # It should also be implied you have a version of python to run it.
     handle_completion()
     if False:
         args = handle_args()
