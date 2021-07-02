@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import subprocess
 
-
 def get_remotes():
     p = subprocess.run(
         "git remote show",
@@ -24,13 +23,16 @@ def remote_to_url(remote_name):
     return remote_name, url
 
 
-def main():
+def display_remote_urls():
     remote_names = map(remote_to_url, get_remotes())
-    remote_names = dict(remote_names)
-    remote_names = map(lambda i: "{}: {}".format(*i), remote_names.items())
+    remote_names = map(lambda i: "{}: {}".format(*i), remote_names)
     remote_names = list(remote_names)
     remote_names.sort()
     print("\n".join(remote_names))
+
+
+def main():
+    display_remote_urls()
 
 
 if __name__ == "__main__":
