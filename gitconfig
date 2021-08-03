@@ -16,6 +16,7 @@
     s = status -suno
     lint = "!flake8 $(git diff --name-only | sed -ne '/.py/p')"
     lint-cached = "!flake8 $(git diff --name-only --cached | sed -ne '/.py/p')"
+    phone-remote = "!$HOME/dotfiles/gitscripts/git_phone_remote.py"
     # Lists remote urls for all remotes added.
     rurls = "!$HOME/dotfiles/gitscripts/git_remotes.py"
     #A smart git commit that uses ".commitmsg" if it's more up-to-date than the files
