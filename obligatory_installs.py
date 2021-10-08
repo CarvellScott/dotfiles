@@ -20,14 +20,12 @@ import sys
 # graphviz
 # 	Deps: fonts-liberation graphviz libann0 libcdt5 libcgraph6 libgd3 libgts-0.7-5 libgts-bin libgvc6 libgvpr2 liblab-gamut1 libpathplan4
 
-# TODO: Consider including .ssh keys, and making sure they have appropriate
-# permissions
 def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
     profile_appendix_added = False
     with open(profile_path, "r") as f:
         lines = f.readlines()
-        if "~/dotfiles/profile-appendix" in lines[-1]:
+        if "~/dotfiles/profile-appendix" in lines:
             profile_appendix_added = True
     if not profile_appendix_added:
         with open(profile_path, "a") as f:
@@ -48,7 +46,7 @@ def install_vundle():
             raise e
 
 def copy_vim_templates():
-    source = pathlib.Path.cwd() / "vim" / "templates"
+    source = pathlib.Path.home() / "dotfiles" / "vim" / "templates"
     destination = pathlib.Path.home() / ".vim" / "templates"
     shutil.copytree(str(source), str(destination), dirs_exist_ok=True)
 
