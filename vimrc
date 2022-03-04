@@ -40,7 +40,6 @@ au BufNewFile,BufRead *.py set keywordprg=pydoc3
 au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
 au BufNewFile,BufRead *.mcmeta set filetype=json
 au BufWritePost *.vimrc :so %
-au BufWritePost *.dot :!dot -Tpng % > %:r.png
 """""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
 " Run the file in python's interactive mode, importing it as a module
