@@ -8,18 +8,20 @@ import shutil
 import subprocess
 import sys
 
-# TODO: Redo this file, taking more of a "build every file dynamically"
-# approach. Specifically, it should accept a technology stack as a parameter
-# and build config files as appropriate. For example, if "git" is supplied,
-# the prompt is adjusted to include $(__git_ps1).
+# TODO: Redo this file, writing/copying files to /etc/profile.d
+# if git is detected, the prompt should be adjusted to include $(__git_ps1).
 
+# TODO: Include various apt installs:
 # apt installs:
 # build-essential ctags python3-dev tmux ffmpeg tree
 
 # apt installs that are useful, but have lots of dependencies:
 # graphviz
 # 	Deps: fonts-liberation graphviz libann0 libcdt5 libcgraph6 libgd3 libgts-0.7-5 libgts-bin libgvc6 libgvpr2 liblab-gamut1 libpathplan4
-
+# pandoc
+#   Deps: pandoc-data
+# asciinema:
+#   Deps: ???
 def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
     profile_appendix_added = False
