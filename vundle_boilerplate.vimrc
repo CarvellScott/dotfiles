@@ -13,7 +13,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'ervandew/supertab'
-Plugin 'calviken/vim-gdscript3'
 "Plugin 'metakirby5/codi.vim'
 
 " The following are examples of different formats supported.
