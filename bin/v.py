@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+This is kind of a sort of personal version of virtualenv_wrapper.
+I wanted auto-completion of my virtualenvs and the ability to create them from
+wherever but without having to install python2.7.
+"""
 import pathlib
 import tempfile
 import subprocess
@@ -11,8 +16,7 @@ def handle_completion():
         command, curr_word, prev_word = sys.argv[1:]
         if prev_word == command:
             p = pathlib.Path.home() / "venvs"
-            dirs = [_.name for _ in p.iterdir()]
-            words = [_ for _ in dirs if _.startswith(curr_word)]
+            words = [_.name for _ in p.glob(curr_word + "*")]
             print("\n".join(words))
         quit()
 
