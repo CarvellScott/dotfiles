@@ -25,3 +25,5 @@
     #TODO: A git hook that calls make <something> if code changes that is supposed to update something
 [diff]
     tool = vimdiff
+[bash]
+    showDirtyState = true # Toggle this off for local repos with git config bash.showDirtyState false
