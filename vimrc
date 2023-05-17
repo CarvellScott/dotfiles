@@ -49,7 +49,8 @@ nnoremap <F4> :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
 " Run the file, assuming it's executable. Try running it in python otherwise.
 " nnoremap <F5> :!cd $(dirname "%:p"); python3 -m %:t:r<Enter>
 " Use this version for ANY executable:
-nnoremap <F5> :!cd $(dirname "%:p");"%:p"<Enter>
+nnoremap <silent> <F5> :w<CR>:!clear; %:p<Enter>
+inoremap <F5> <Esc>:w<CR>:!clear; %:p<Enter>
 " Run the file assuming it's a bunch of unittests
 nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
 nnoremap <F7> :!python3 -m doctest "%:p" <Enter>
