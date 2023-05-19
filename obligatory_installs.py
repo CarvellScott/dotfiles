@@ -13,7 +13,7 @@ import sys
 
 # TODO: Include various apt installs:
 # apt installs:
-# build-essential ctags python3-dev tmux ffmpeg tree
+# build-essential ctags python3-dev tmux ffmpeg tree fzf
 
 # apt installs that are useful, but have lots of dependencies:
 # graphviz
@@ -22,6 +22,11 @@ import sys
 #   Deps: pandoc-data
 # asciinema:
 #   Deps: ???
+
+# FOR TERMUX:
+# Packages need to be installed with pkg install
+# openssh
+
 def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
     profile_appendix_added = False
