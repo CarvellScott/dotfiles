@@ -13,15 +13,18 @@ import sys
 
 # TODO: Include various apt installs:
 # apt installs:
-# build-essential ctags python3-dev tmux ffmpeg tree fzf
+# build-essential ctags python3-dev tmux ffmpeg tree fzf entr podman
 
 # apt installs that are useful, but have lots of dependencies:
 # graphviz
 # 	Deps: fonts-liberation graphviz libann0 libcdt5 libcgraph6 libgd3 libgts-0.7-5 libgts-bin libgvc6 libgvpr2 liblab-gamut1 libpathplan4
 # pandoc
 #   Deps: pandoc-data
-# asciinema:
-#   Deps: ???
+
+# Tools to evaluate?
+# asciinema: For recording terminal sessions
+# parallel: Write single-threaded code, let OS parallelize it: https://www.gnu.org/software/parallel/
+# ninja-build: An EXTREMELY SIMPLE build system: https://jvns.ca/blog/2020/10/26/ninja--a-simple-way-to-do-builds/
 
 # FOR TERMUX:
 # Packages need to be installed with pkg install
