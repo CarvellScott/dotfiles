@@ -25,6 +25,10 @@ set clipboard=unnamedplus
 set fillchars+=vert:│
 set wildignore+=*.pyc
 hi VertSplit cterm=none ctermfg=none ctermbg=none
+" Disable swap file and backups. Version control is more convenient.
+set nobackup
+set nowb
+set noswapfile
 
 let python_highlight_all=1
 syntax on
@@ -62,15 +66,26 @@ nnoremap <C-K> :!cat % \| xclip -i -selection clipboard<Enter><Enter>
 " Make ctags auto-prompt for duplicate tags
 nnoremap <C-]> :execute 'tj' expand('<cword>')<CR>zv
 
-"imap <C-l> OC
-"imap <C-h> OD
-"imap <C-j> OB
-"imap <C-k> OA
-
-"\e to edit whatever file is found via recursive search in current directory
+" I realized my chromebook doesn't have F1-F12. Unfortunate.
+" \e to edit whatever file is found via recursive search in current directory
 nmap <leader>e :e **/
+"\p to toggle paste mode
+nnoremap <leader>p :set invnumber<Enter><F2>
+" \i to run a python file interactively
+nnoremap <leader>i :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
+" \x to just save and execute a file
+nnoremap <silent> <leader>x :w<CR>:!clear; %:p<Enter>
+" \u To run python unittests for the current file
+nnoremap <leader>u :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
+" \d To run doctests on the current python file
+nnoremap <leader>d :!python3 -m doctest "%:p" <Enter>
+" \j To pretty-print whatever JSON data is open
+nnoremap <leader>j :%!python3 -m json.tool --sort-keys<Enter>"
+
+" NOTE: This doesn't actually seem to work
 map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
+
 
 """""""""" ABBREVIATIONS """"""""""
 iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_word = sys.argv[1:]<Enter>
