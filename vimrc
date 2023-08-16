@@ -57,7 +57,7 @@ nnoremap <silent> <F5> :w<CR>:!clear; %:p<Enter>
 inoremap <F5> <Esc>:w<CR>:!clear; %:p<Enter>
 " Run the file assuming it's a bunch of unittests
 nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
-nnoremap <F7> :!python3 -m doctest "%:p" <Enter>
+nnoremap <F7> :!clear; python3 -m doctest "%:p" <Enter>
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");autopep8 -d $(basename "%:p")<Enter>
 " Clean and pretty-print JSON
