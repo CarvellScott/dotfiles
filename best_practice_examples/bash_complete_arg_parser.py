@@ -80,8 +80,10 @@ def get_arg_parser():
         help="Do not use interactive prompts."
     )
     parser.add_argument(
-        "-o", "--output", action="store_true",
-        help="Output file."
+        "-o", "--output",
+        type=argparse.FileType("w"),
+        default=sys.stdout,
+        help="Output file. Output format should be derived from this."
     )
     parser.add_argument(
         "-p", "--port", type=int,
@@ -109,9 +111,10 @@ def main():
     args = parser.parse_args()
     if args.no_input:
         user = input("Hello, what is your name?")
-        print(f"Hello, {user}")
+        print(f"Hello, {user}", file=args.output)
     else:
-        print("Running non-interactively")
+        print("Running non-interactively", file=sys.stderr)
+    print(f"Output written to {args.output.name}")
 
 
 if __name__ == "__main__":
