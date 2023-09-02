@@ -12,6 +12,7 @@
     l = log --graph --oneline --decorate
     patchlog = log --reverse -p
     ppp = "!$HOME/dotfiles/gitscripts/git_ppp.py | vi -"
+    ps1-dirty-state = config --local --add bash.showDirtyState
     pytags = "!ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./"
     s = status -suno
     lint = "!flake8 $(git diff --name-only | sed -ne '/.py/p')"
