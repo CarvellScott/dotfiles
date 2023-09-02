@@ -41,6 +41,7 @@ au BufNewFile,BufRead *.py set makeef=/dev/null
 
 au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
 au BufNewFile,BufRead *.mcmeta set filetype=json
+au BufNewFile pyproject.toml 0r ~/.vim/templates/skeleton.pyproject.toml
 au BufWritePost *.vimrc :so %
 """""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
