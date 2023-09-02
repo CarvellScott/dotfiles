@@ -25,10 +25,6 @@ set clipboard=unnamedplus
 set fillchars+=vert:│
 set wildignore+=*.pyc
 hi VertSplit cterm=none ctermfg=none ctermbg=none
-" Disable swap file and backups. Version control is more convenient.
-set nobackup
-set nowb
-set noswapfile
 
 let python_highlight_all=1
 syntax on
