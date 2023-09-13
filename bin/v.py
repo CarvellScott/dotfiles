@@ -33,7 +33,7 @@ def main():
             print(msg)
             create_venv = input("Create it? (y/n)")
             if "y" in create_venv:
-                venv.create(venv_path)
+                venv.create(venv_path, with_pip=True)
     venv_activate = str(venv_activate)
     # Create the fused file and execute
     tmp_rc_content = (
