@@ -36,7 +36,7 @@ au BufNewFile,BufRead *.py set expandtab
 au BufNewFile,BufRead *.py set autoindent
 au BufNewFile,BufRead *.py set fileformat=unix
 au BufNewFile,BufRead tags set fileencoding=utf-8
-au BufNewFile,BufRead *.py set keywordprg=pydoc3
+au BufNewFile,BufRead *.py set keywordprg=/usr/bin/env\ -S\ python3\ -m\ pydoc
 au BufNewFile,BufRead *.py set makeef=/dev/null
 
 au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
