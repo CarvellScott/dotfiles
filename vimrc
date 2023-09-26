@@ -79,6 +79,8 @@ nnoremap <leader>u :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
 nnoremap <leader>d :!python3 -m doctest "%:p" <Enter>
 " \j To pretty-print whatever JSON data is open
 nnoremap <leader>j :%!python3 -m json.tool --sort-keys<Enter>"
+" \l To fly between buffers.
+nnoremap <leader>l :ls<CR>:b<space>
 
 " NOTE: This doesn't actually seem to work
 map <ScrollWheelDown> :undo<CR>
@@ -95,8 +97,10 @@ command! -range=% RUNLINES :<line1>,<line2>!python3
 command EVIMRC :e $HOME/.vimrc
 command SOVIMRC :so $HOME/.vimrc
 command! -range=% JSONTIDY :<line1>,<line2>!python3 -m json.tool --sort-keys
-" Requires sudo apt install graphviz
+" Render a .dot file. Requires graphviz
 command DotRender !dot -Tpng % > %:r.png
+" Convert a .csv to a .sql dump. Requires sqlite3
+command CSV2SQL :%!sqlite3 -csv ':memory:' '.import /dev/stdin %:t:r' '.mode column' '.dump'
 colorscheme zellner
 set visualbell
 
