@@ -22,12 +22,13 @@ class BashCompleteArgParser(argparse.ArgumentParser):
         return matches
 
 
-    def bash_complete_handler(self):
+    def parse_args(self):
         if os.environ.get("COMP_LINE") and os.environ.get("COMP_POINT"):
             matches = self._bash_complete_recursor()
             if matches:
                 print("\n".join(matches))
             quit()
+        return super().parse_args()
 
 
 def get_arg_parser():
