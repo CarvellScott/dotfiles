@@ -9,6 +9,8 @@ keywords = []
 authors = [] # Example: {name = "Sombra", email = "sombra@talon.com"}
 maintainers = # Same format as above
 dependencies = [] # Examples: ["httpx", "django>2.1; os_name != 'nt'"]
+# Format can be generated from requirements.txt with:
+# python3 -c 'print([_.strip() for _ in open("requirements.txt", "r").readlines()])'
 
 [project.optional-dependencies]
 gui = [] # Example: ["PyQt5"]
@@ -31,7 +33,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 py-modules = ["my_module"]
 packages = []
-package-dir = []
+package-dir = {}
 
 [tool.setuptools.packages.find]
 where = ["src"]  # list of folders that contain the packages (["."] by default)
