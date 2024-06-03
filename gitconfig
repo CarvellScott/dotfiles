@@ -30,3 +30,7 @@
     tool = vimdiff
 [bash]
     showDirtyState = true # Toggle this off for local repos with git config bash.showDirtyState false
+[rebase]
+	autoSquash = true
+[init]
+	defaultBranch = main
