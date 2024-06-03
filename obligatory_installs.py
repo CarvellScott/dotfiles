@@ -13,7 +13,7 @@ import sys
 
 # TODO: Include various apt installs:
 # apt installs:
-# build-essential ctags python3-dev tmux ffmpeg tree fzf entr podman
+# build-essential ctags python3-dev tmux ffmpeg tree fzf podman
 
 # apt installs that are useful, but have lots of dependencies:
 # graphviz
@@ -25,10 +25,18 @@ import sys
 # asciinema: For recording terminal sessions
 # parallel: Write single-threaded code, let OS parallelize it: https://www.gnu.org/software/parallel/
 # ninja-build: An EXTREMELY SIMPLE build system: https://jvns.ca/blog/2020/10/26/ninja--a-simple-way-to-do-builds/
+# entr: Reads a list of files on stdin, runs utilities passed as arguments when the files change.
 
-# FOR TERMUX:
-# Packages need to be installed with pkg install
-# openssh
+# Machine-specific quirks (should probably move this to a README
+# WSL:
+# -/mnt has problems with entr and __git_ps1 when repos get big.
+# Macbook:
+# - Uses zsh. Lots of stuff needs to be moved to aliases.
+# Phone/Termux:
+# - Termux packages need to be installed with pkg install
+# - openssh is near mandatory
+# Chromebook:
+# - No F1-F12 keys, don't use those as shortcuts
 
 def append_to_profile():
     profile_path = pathlib.Path.home() / ".profile"
