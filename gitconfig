@@ -5,14 +5,14 @@
 	editor = vim
 [alias]
     co = "!vim ~/.gitconfig"
-    df = "!f() { git difftool -d $1^ $1 ; } ; f"
     diffno = diff --name-only
     hooked = "!cp ~/dotfiles/githooks/* ./.git/hooks"
-    ignore-builder = "!$HOME/dotfiles/gitscripts/git_ignore_builder.py"
+    ignore-builder = "!$HOME/dotfiles/gitscripts/git-create-gitignore"
     l = log --graph --oneline --decorate
     patchlog = log --reverse -p
-    ppp = "!$HOME/dotfiles/gitscripts/git_ppp.py | vi -"
+    ppp = "!$HOME/dotfiles/gitscripts/git-ppp | vi -"
     ps1-dirty-state = config --local --add bash.showDirtyState
+    push-to-deploy = config --local receive.denyCurrentBranch updateInstead
     pytags = "!ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./"
     s = status -suno
     lint = "!flake8 $(git diff --name-only | sed -ne '/.py/p')"
@@ -21,9 +21,9 @@
     # Lists remote urls for all remotes added.
     rurls = "!$HOME/dotfiles/gitscripts/git_remotes.py"
     #A smart git commit that uses ".commitmsg" if it's more up-to-date than the files
-    smc = "!$HOME/dotfiles/gitscripts/git_smart_commit.py"
-    todos = "!$HOME/dotfiles/gitscripts/git_todos.py"
-    #TODO: A git hook that calls make <something> if code changes that is supposed to update something
+    smc = "!$HOME/dotfiles/gitscripts/git-smart-commit"
+    # Searches for and lists all TODOs in vim's quickfix format
+    todos = "!$HOME/dotfiles/gitscripts/git-todos"
 [diff]
     # Strip the prefix in git diff output
     noprefix = true
