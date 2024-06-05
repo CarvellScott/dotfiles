@@ -8,11 +8,12 @@ import subprocess
 def find_gitignore():
     cwd = pathlib.Path.cwd()
     git_folder = None
+    git_ignore_location = cwd / ".gitignore"
     for path in [cwd] + list(cwd.parents):
         git_folder = path / ".git"
         if git_folder.exists():
+            git_ignore_location = git_folder.parent / ".gitignore"
             break
-    git_ignore_location = git_folder.parent / ".gitignore"
     print(str(git_ignore_location))
     return git_ignore_location
 
