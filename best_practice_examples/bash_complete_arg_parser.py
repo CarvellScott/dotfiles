@@ -108,7 +108,6 @@ def get_arg_parser():
 
 def main():
     parser = get_arg_parser()
-    parser.bash_complete_handler()
     args = parser.parse_args()
     if args.no_input:
         user = input("Hello, what is your name?")
