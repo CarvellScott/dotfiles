@@ -55,7 +55,7 @@ nnoremap <silent> <F5> :w<CR>:!clear; %:p<Enter>
 inoremap <F5> <Esc>:w<CR>:!clear; %:p<Enter>
 " Run the file assuming it's a bunch of unittests
 nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
-nnoremap <F7> :!clear; python3 -m doctest "%:p" <Enter>
+nnoremap <F7> :!clear; python3 -m doctest "%:p" && %:p<Enter>
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");autopep8 -d $(basename "%:p")<Enter>
 " Clean and pretty-print JSON
@@ -76,7 +76,7 @@ nnoremap <silent> <leader>x :w<CR>:!clear; %:p<Enter>
 " \u To run python unittests for the current file
 nnoremap <leader>u :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
 " \d To run doctests on the current python file
-nnoremap <leader>d :!python3 -m doctest "%:p" <Enter>
+nnoremap <leader>d :!clear; python3 -m doctest "%:p" && %:p<Enter>
 " \j To pretty-print whatever JSON data is open
 nnoremap <leader>j :%!python3 -m json.tool --sort-keys<Enter>"
 " \l To fly between buffers.
