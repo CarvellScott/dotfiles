@@ -13,7 +13,7 @@ import sys
 
 # TODO: Include various apt installs:
 # apt installs:
-# build-essential ctags python3-dev tmux ffmpeg tree fzf podman
+# build-essential ctags python3-dev tmux ffmpeg tree fzf podman unzip
 
 # apt installs that are useful, but have lots of dependencies:
 # graphviz
