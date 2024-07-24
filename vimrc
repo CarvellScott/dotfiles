@@ -81,6 +81,8 @@ nnoremap <leader>d :!clear; python3 -m doctest "%:p" && %:p<Enter>
 nnoremap <leader>j :%!python3 -m json.tool --sort-keys<Enter>"
 " \l To fly between buffers.
 nnoremap <leader>l :ls<CR>:b<space>
+" \c To fly between quickfix list entries
+nnoremap <leader>c :clist<CR>:cc<space>
 
 " NOTE: This doesn't actually seem to work
 map <ScrollWheelDown> :undo<CR>
@@ -101,7 +103,7 @@ command! -range=% JSONTIDY :<line1>,<line2>!python3 -m json.tool --sort-keys
 command DotRender !dot -Tpng % > %:r.png
 " Convert a .csv to a .sql dump. Requires sqlite3
 command CSV2SQL :%!sqlite3 -csv ':memory:' '.import /dev/stdin %:t:r' '.mode column' '.dump'
-colorscheme zellner
+"colorscheme default
 set visualbell
 
 if &diff
