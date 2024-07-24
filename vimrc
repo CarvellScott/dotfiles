@@ -5,7 +5,6 @@ function! SourceIfExists(file)
   endif
 endfunction
 call SourceIfExists("~/dotfiles/vundle_boilerplate.vimrc")
-
 " Use the iMproved version of vi. We're not in the 70s anymore.
 set nocompatible
 " General opinionated imiprovements
@@ -93,7 +92,6 @@ map <ScrollWheelUp> :redo<CR>
 iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_word = sys.argv[1:]<Enter>
 
 """""""""" COMMANDS """"""""""
-command OScopy !cat % | xclip
 command RUN :w !python3
 command! -range=% RUNLINES :<line1>,<line2>!python3
 command EVIMRC :e $HOME/.vimrc
@@ -118,4 +116,6 @@ let g:netrw_browsex_viewer='firefox'
 set vb t_vb=     " no visual bell & flash
 let g:markdown_fenced_languages = ['diff', 'html', 'json', 'python']
 
+autocmd BufNewFile,BufRead *.png set filetype=hex_highlight
 call SourceIfExists("~/.vimrc.local")
+
