@@ -7,6 +7,7 @@
     co = "!vim ~/.gitconfig"
     diffno = diff --name-only
     hooked = "!cp ~/dotfiles/githooks/* ./.git/hooks"
+    clean-ignored = clean -d -i -X
     ignore-builder = "!$HOME/dotfiles/gitscripts/git-create-gitignore"
     l = log --graph --oneline --decorate
     patchlog = log --reverse -p
