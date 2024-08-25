@@ -14,6 +14,8 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'ervandew/supertab'
 "Plugin 'metakirby5/codi.vim'
+Plugin 'mattn/emmet-vim'
+Plugin 'christoomey/vim-tmux-navigator'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
