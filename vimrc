@@ -35,6 +35,8 @@ au BufNewFile,BufRead *.py set expandtab
 au BufNewFile,BufRead *.py set autoindent
 au BufNewFile,BufRead *.py set fileformat=unix
 au BufNewFile,BufRead tags set fileencoding=utf-8
+au BufNewFile,BufRead *.py set foldmethod=indent
+au BufNewFile,BufRead *.py set foldlevel=99
 au BufNewFile,BufRead *.py set keywordprg=/usr/bin/env\ -S\ python3\ -m\ pydoc
 au BufNewFile,BufRead *.py set makeef=/dev/null
 
@@ -82,6 +84,16 @@ nnoremap <leader>j :%!python3 -m json.tool --sort-keys<Enter>"
 nnoremap <leader>l :ls<CR>:b<space>
 " \c To fly between quickfix list entries
 nnoremap <leader>c :clist<CR>:cc<space>
+map z1 :set foldlevel=0<CR><Esc>
+map z2 :set foldlevel=1<CR><Esc>
+map z3 :set foldlevel=2<CR><Esc>
+map z4 :set foldlevel=3<CR><Esc>
+map z5 :set foldlevel=4<CR><Esc>
+map z6 :set foldlevel=5<CR><Esc>
+map z7 :set foldlevel=6<CR><Esc>
+map z8 :set foldlevel=7<CR><Esc>
+map z9 :set foldlevel=8<CR><Esc>
+map z0 :set foldlevel=9<CR><Esc>
 
 " NOTE: This doesn't actually seem to work
 map <ScrollWheelDown> :undo<CR>
