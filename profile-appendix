@@ -3,6 +3,7 @@
 . $HOME/dotfiles/common_profile_parts/cool_prompt
 . $HOME/dotfiles/common_profile_parts/cdpath_jumps
 complete -C v v
+export EDITOR=/usr/bin/vim
 if [ -f "$HOME/.profile.local" ] ; then
     . "$HOME/.profile.local"
 fi
