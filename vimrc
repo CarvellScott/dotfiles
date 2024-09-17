@@ -113,7 +113,6 @@ command! -range=% JSONTIDY :<line1>,<line2>!python3 -m json.tool --sort-keys
 command DotRender !dot -Tpng % > %:r.png
 " Convert a .csv to a .sql dump. Requires sqlite3
 command CSV2SQL :%!sqlite3 -csv ':memory:' '.import /dev/stdin %:t:r' '.mode column' '.dump'
-"colorscheme default
 set visualbell
 
 if &diff
