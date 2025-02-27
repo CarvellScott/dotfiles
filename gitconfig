@@ -5,6 +5,9 @@
 	editor = vim
 [alias]
     co = "!vim ~/.gitconfig"
+    config-ps1-dirty-state = config --local --add bash.showDirtyState
+    config-push-to-deploy = config --local receive.denyCurrentBranch updateInstead
+    config-auto-setup-remote = config --local push.autoSetupRemote true
     diffno = diff --name-only
     hooked = "!cp ~/dotfiles/githooks/* ./.git/hooks"
     clean-ignored = clean -d -i -X
@@ -12,8 +15,6 @@
     l = log --graph --oneline --decorate
     patchlog = log --reverse -p
     ppp = "!$HOME/dotfiles/gitscripts/git-ppp | vi -"
-    ps1-dirty-state = config --local --add bash.showDirtyState
-    push-to-deploy = config --local receive.denyCurrentBranch updateInstead
     pytags = "!ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./"
     s = status -suno
     lint = "!flake8 $(git diff --name-only | sed -ne '/.py/p')"
@@ -26,12 +27,14 @@
     # Searches for and lists all TODOs in vim's quickfix format
     todos = "!$HOME/dotfiles/gitscripts/git-todos"
 [diff]
+    algorithm = histogram
     # Strip the prefix in git diff output
     noprefix = true
     tool = vimdiff
 [bash]
-    showDirtyState = true # Toggle this off for local repos with git config bash.showDirtyState false
+    showDirtyState = true # Toggle this off for local repos with `git config bash.showDirtyState false`
 [rebase]
 	autoSquash = true
+    updateRefs = true
 [init]
 	defaultBranch = main
