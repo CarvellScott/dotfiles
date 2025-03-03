@@ -3,6 +3,7 @@
 	name = Carvell Scott
 [core]
 	editor = vim
+    pager = less -F -X
 [alias]
     co = "!vim ~/.gitconfig"
     config-ps1-dirty-state = config --local --add bash.showDirtyState
@@ -12,7 +13,8 @@
     hooked = "!cp ~/dotfiles/githooks/* ./.git/hooks"
     clean-ignored = clean -d -i -X
     ignore-builder = "!$HOME/dotfiles/gitscripts/git-create-gitignore"
-    l = log --graph --oneline --decorate
+    #l = log --graph --oneline --decorate
+    l = log --graph --pretty='%C(auto)%h%Creset%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short
     patchlog = log --reverse -p
     ppp = "!$HOME/dotfiles/gitscripts/git-ppp | vi -"
     pytags = "!ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags ./"
@@ -28,8 +30,10 @@
     todos = "!$HOME/dotfiles/gitscripts/git-todos"
 [diff]
     algorithm = histogram
-    # Strip the prefix in git diff output
-    noprefix = true
+    # Strip the prefix in git diff output. It's nice to have but bad for interoperability
+    # noprefix = true
+    tool = vimdiff
+[merge]
     tool = vimdiff
 [bash]
     showDirtyState = true # Toggle this off for local repos with `git config bash.showDirtyState false`
@@ -38,3 +42,5 @@
     updateRefs = true
 [init]
 	defaultBranch = main
+#[color "blame"]
+    #highlightRecent = 237, 20 month ago, 238, 19 month ago, 239, 18 month ago, 240, 17 month ago, 241, 16 month ago, 242, 15 month ago, 243, 14 month ago, 244, 13 month ago, 245, 12 month ago, 246, 11 month ago, 247, 10 month ago, 248, 9 month ago, 249, 8 month ago, 250, 7 month ago, 251, 6 month ago, 252, 5 month ago, 253, 4 month ago, 254, 3 month ago, 231, 2 month ago, 230, 1 month ago, 229, 3 weeks ago, 228, 2 weeks ago, 227, 1 week ago, 226
