@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse
-import datetime
 import os
 import sys
 
@@ -41,67 +40,46 @@ def get_arg_parser():
     )
 
     parser = BashCompleteArgParser(description=description)
-    parser.add_argument("-a", "--all", action="store_true", help="All.")
-    parser.add_argument("--after", type=datetime.datetime.fromisoformat,
-                        help="After.")
-    parser.add_argument("--before", type=datetime.datetime.fromisoformat,
-                        help="Before.")
     parser.add_argument(
-        "-c", "--csv", action="store_true",
-        help="Display csv output."
+        "-c", "--config", type=pathlib.Path,
+        help="Configuration file. Ideally something that supports shebangs."
     )
-    # Opinion: Ideally a user should not have to debug a tool you wrote. This
-    # also should probably be mutually exclusive with -q
+    # Opinion: Ideally a user should not have to debug a tool you wrote, so
+    # don't necessarily show them debug output. DO however, create some file
+    # they can send to you for debugging.
     parser.add_argument(
         "-d", "--debug", action="store_true",
-        help="Show debugging output."
+        help="Enable debugging functions."
     )
-    # Destructiveness of a script should be a scale of 0-2:
-    # 0: Change nothing, only print what will be done.
-    # 1: Perform "normal" actions
-    # 2: FLYYY MEEE TOOO THE DANGER ZONE!
-    destructiveness = parser.add_mutually_exclusive_group()
-    destructiveness.add_argument(
-        "--dry-run", action="store_true",
-        help="Print what will be done without actually doing it."
-    )
-    destructiveness.add_argument(
-        "-f", "--force", action="store_true",
+    # Opinion: Dry runs should be built into interactive confirmations.
+    parser.add_argument(
+        "-f", "--force", action="count", default=0,
         help="Bypass confirmation for destructive actions."
     )
+    # Opinion: The program should assume non-interactivity by default
     parser.add_argument(
-        "--json", action="store_true",
-        help="Display JSON output."
-    )
-    # Opinion: "-i/--interactive" is better, but if a person is using a CLI,
-    # the program should be interactive by default.
-    parser.add_argument(
-        "-n", "--no-input", action="store_false",
+        "-i", "--interactive", action="store_true",
         default=sys.stdin.isatty() and sys.stdout.isatty(),
-        help="Do not use interactive prompts."
+        help="Allow interactive prompts"
     )
     parser.add_argument(
         "-o", "--output",
         type=argparse.FileType("w"),
         default=sys.stdout,
-        help="Output file. Output format should be derived from this."
+        help="Output file. Output format should be derived from the filename"
     )
-    parser.add_argument(
-        "-p", "--port", type=int,
-        help="Port."
-    )
+    # Opinion: Verbosity is best controlled via --quiet.
     parser.add_argument(
         "-q", "--quiet", action="store_true",
         help="Display less output."
     )
-    parser.add_argument(
-        "-u", "--user", type=str,
-        help="User."
-    )
-    # Opinion: Verbosity is best controlled via --quiet.
+
+    parser.add_argument("-a", "--all", action="store_true", help="All.")
+    parser.add_argument("-p", "--port", type=int, help="Port.")
+    parser.add_argument("-u", "--user", type=str, help="User.")
     parser.add_argument(
         "-v", "--version", action="version",
-        version="Unversioned"
+        version="0.0.0"
     )
     return parser
 
@@ -109,7 +87,8 @@ def get_arg_parser():
 def main():
     parser = get_arg_parser()
     args = parser.parse_args()
-    if args.no_input:
+    print(args, file=sys.stderr)
+    if args.interactive:
         user = input("Hello, what is your name?")
         print(f"Hello, {user}", file=args.output)
     else:
