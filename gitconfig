@@ -3,7 +3,6 @@
 	name = Carvell Scott
 [core]
 	editor = vim
-    pager = less -F -X
 [alias]
     co = "!vim ~/.gitconfig"
     config-ps1-dirty-state = config --local --add bash.showDirtyState

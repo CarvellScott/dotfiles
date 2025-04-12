@@ -4,6 +4,8 @@
 . $HOME/dotfiles/common_profile_parts/cdpath_jumps
 complete -C v v
 export EDITOR=/usr/bin/vim
+export PAGER=/usr/bin/less
+export LESS="RS"
 if [ -f "$HOME/.profile.local" ] ; then
     . "$HOME/.profile.local"
 fi
