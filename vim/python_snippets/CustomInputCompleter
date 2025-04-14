@@ -1,0 +1,21 @@
+class CustomInputCompleter:
+    def __init__(self, context):
+        self._context = context
+        self._prev_completer = None
+
+    def __enter__(self):
+        if readline:
+            self._prev_completer = readline.get_completer()
+            readline.parse_and_bind("tab: complete")
+            readline.set_completer(self)
+        return self
+
+    def __exit__(self, exc_type, exc_val, tb):
+        if readline:
+            readline.set_completer(self._prev_completer)
+
+    def __call__(self, text, state):
+        results = [_ for _ in self._context if _.startswith(text)] + [None]
+        return results[state] + " "
+
+

@@ -102,6 +102,8 @@ map <ScrollWheelUp> :redo<CR>
 
 """""""""" ABBREVIATIONS """"""""""
 iabbrev bashcomp if "COMP_LINE" in os.environ:<Enter>command, curr_word, prev_word = sys.argv[1:]<Enter>
+iabbrev classCustomInputCompleter <Esc>:0r ~/dotfiles/vim/python_snippets/CustomInputCompleter<Enter>
+autocmd BufNewFile,BufRead Makefile iabbrev help: <Esc>:-1r ~/dotfiles/vim/makefile_snippets/help<Enter>
 
 """""""""" COMMANDS """"""""""
 command RUN :w !python3
