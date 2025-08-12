@@ -10,7 +10,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'kien/ctrlp.vim'
 Plugin 'Vimjas/vim-python-pep8-indent'
 Plugin 'ervandew/supertab'
 "Plugin 'metakirby5/codi.vim'
