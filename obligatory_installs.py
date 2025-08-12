@@ -8,14 +8,14 @@ import shutil
 import subprocess
 import sys
 
-# TODO: Redo this file, writing/copying files to /etc/profile.d.
+# TODO: Redo this file. Maybe migrate to cloud-init?
 # Use a state machine to detect absence of parts of tech stack and install them
 # if needed.
 # if git is detected, the prompt should be adjusted to include $(__git_ps1).
 
 # TODO: Include various apt installs:
 # apt installs:
-# build-essential ctags python3-dev tmux ffmpeg tree fzf podman unzip
+# build-essential universal-ctags python3-venv tmux ffmpeg tree fzf podman unzip
 
 # apt installs that are useful, but have lots of dependencies:
 # graphviz
@@ -34,7 +34,6 @@ import sys
 # - There seems to be some kind of crash that occurs if I symlink to /mnt/c/Users
 # -/mnt has problems with entr and __git_ps1 when repos get big.
 # - fzf has to be installed from github: https://github.com/junegunn/fzf/releases/download/v0.65.1/fzf-0.65.1-linux_amd64.tar.gz
-# - pip installed from pypa.io due to dumb packaging stuff: curl 'https://bootstrap.pypa.io/pip/pip.pyz' -o ~/bin/pip
 # Macbook:
 # - Uses zsh. Lots of stuff needs to be moved to aliases.
 # Phone/Termux:
@@ -149,6 +148,7 @@ def detect_tech_stack():
 
     return summary
 
+
 def handle_completion():
     if os.environ.get("COMP_LINE") and os.environ.get("COMP_POINT"):
         parser = argparse.ArgumentParser()
@@ -160,6 +160,25 @@ def handle_completion():
             matches = [k for k in matches if k.startswith(curr_word)]
             print("\n".join(matches))
         quit()
+
+
+def ensure_fzf():
+    print("Checking for fzf...")
+    if shutil.which("fzf"):
+        return
+
+    fzf_tar_path = pathlib.Path("fzf.tar.gz")
+    if not fzf_tar_path.exists():
+        print("Downloading fzf")
+        gh_url = "https://github.com/junegunn/fzf/releases/download/v0.65.1/fzf-0.65.1-linux_amd64.tar.gz"
+        curl_cmd = ["curl", "-LsSf", gh_url, "-o", str(fzf_tar_path)]
+        subprocess.check_call(curl_cmd, universal_newlines=True)
+
+    print("Installing fzf")
+    tar_cmd = ["tar", "-xf", str(fzf_tar_path)]
+    subprocess.check_output(tar_cmd, universal_newlines=True)
+    shutil.move("fzf", str(pathlib.Path.home() / "bin/"))
+    pathlib.Path(fzf_tar_path).unlink()
 
 
 class SymLinkerCmd(cmd.Cmd):
@@ -202,6 +221,7 @@ def main():
     symlink_bin()
     copy_vim_templates()
     silence_bell()
+    ensure_fzf()
 
 
 if __name__ == "__main__":
