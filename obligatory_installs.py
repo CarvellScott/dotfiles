@@ -8,7 +8,9 @@ import shutil
 import subprocess
 import sys
 
-# TODO: Redo this file, writing/copying files to /etc/profile.d
+# TODO: Redo this file, writing/copying files to /etc/profile.d.
+# Use a state machine to detect absence of parts of tech stack and install them
+# if needed.
 # if git is detected, the prompt should be adjusted to include $(__git_ps1).
 
 # TODO: Include various apt installs:
@@ -27,9 +29,12 @@ import sys
 # ninja-build: An EXTREMELY SIMPLE build system: https://jvns.ca/blog/2020/10/26/ninja--a-simple-way-to-do-builds/
 # entr: Reads a list of files on stdin, runs utilities passed as arguments when the files change.
 
-# Machine-specific quirks (should probably move this to a README
+# Machine-specific quirks (should probably move this to a README, maybe GH issues )
 # WSL:
+# - There seems to be some kind of crash that occurs if I symlink to /mnt/c/Users
 # -/mnt has problems with entr and __git_ps1 when repos get big.
+# - fzf has to be installed from github: https://github.com/junegunn/fzf/releases/download/v0.65.1/fzf-0.65.1-linux_amd64.tar.gz
+# - pip installed from pypa.io due to dumb packaging stuff: curl 'https://bootstrap.pypa.io/pip/pip.pyz' -o ~/bin/pip
 # Macbook:
 # - Uses zsh. Lots of stuff needs to be moved to aliases.
 # Phone/Termux:
