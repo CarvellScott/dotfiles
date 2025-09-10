@@ -1,0 +1,33 @@
+#!/usr/bin/env -S iconv -o /mnt/c/Users/Carvell/.cloud-init/Ubuntu.user-data
+#cloud-config
+locale: en_US
+users:
+- name: cscott
+  gecos: Carvell Scott
+  groups: [users]
+  sudo: ALL=(ALL) NOPASSWD:ALL
+  ssh_import_id:
+    - gh:CarvellScott
+  shell: /bin/bash
+
+write_files:
+- path: /etc/wsl.conf
+  append: true
+  content: |
+    [user]
+    default=cscott
+
+# TODO: include fzf here once Debian distributes 0.48.0 or higher.
+packages: [
+  entr,
+  pandoc,
+  parallel,
+  podman,
+  python3-venv,
+  sqlite3,
+  tree,
+  universal-ctags
+]
+
+runcmd:
+   - sudo -u cscott git clone https://github.com/CarvellScott/dotfiles.git /home/cscott/dotfiles
