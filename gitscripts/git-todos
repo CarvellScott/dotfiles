@@ -2,11 +2,10 @@
 import subprocess
 
 def main():
-    command = "git grep -nor '# \?TODO.*'"
+    command_args = ["git", "grep", "-inor", r"# \?TODO.*"]
     p = subprocess.run(
-        command,
+        command_args,
         stdout=subprocess.PIPE,
-        shell=True,
         universal_newlines=True
     )
     print(p.stdout.strip())
