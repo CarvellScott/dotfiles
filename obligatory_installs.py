@@ -67,10 +67,11 @@ def install_vundle():
         except subprocess.CalledProcessError as e:
             raise e
 
-def copy_vim_templates():
-    source = pathlib.Path.home() / "dotfiles" / "vim" / "templates"
-    destination = pathlib.Path.home() / ".vim" / "templates"
-    shutil.copytree(str(source), str(destination), dirs_exist_ok=True)
+def copy_vim_stuff():
+    for directory in ["colors", "templates"]:
+        source = pathlib.Path.home() / "dotfiles" / "vim" / directory
+        destination = pathlib.Path.home() / ".vim" / directory
+        shutil.copytree(str(source), str(destination), dirs_exist_ok=True)
 
 def symlink_dotfiles():
     dotfiles = ["bash_aliases", "dircolors", "gitconfig", "tmux.conf", "vimrc"]
@@ -219,7 +220,7 @@ def main():
     symlink_dotfiles()
     symlink_windows_user()
     symlink_bin()
-    copy_vim_templates()
+    copy_vim_stuff()
     silence_bell()
     ensure_fzf()
 
