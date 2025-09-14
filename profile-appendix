@@ -6,6 +6,7 @@ complete -C v v
 export EDITOR=/usr/bin/vim
 export PAGER=/usr/bin/less
 export LESS="RS"
+export BROWSER=$(command -v "explorer.exe")
 if [ -f "$HOME/.profile.local" ] ; then
     . "$HOME/.profile.local"
 fi
