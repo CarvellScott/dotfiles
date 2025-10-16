@@ -46,17 +46,21 @@ au BufNewFile pyproject.toml 0r ~/.vim/templates/skeleton.pyproject.toml
 au BufNewFile,BufRead pyproject.toml set keywordprg=$HOME/dotfiles/bin/halp.py\ 'https://packaging.python.org/en/latest/guides/writing-pyproject-toml/\\#'
 au BufWritePost *.vimrc :so %
 au BufNewFile,BufRead *.dockerfile set filetype=dockerfile
+
+" Render a .dot file. Requires graphviz
+command DotRender !dot -Tsvg % > %:t:r.svg
+au BufWritePost *.dot :DotRender
 """""""""" KEYBINDS """"""""""
 nnoremap <F3> :set invnumber<Enter><F2>
 " Run the file in python's interactive mode, importing it as a module
-nnoremap <F4> :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
+nnoremap <F4> :!PYTHONPATH="$(dirname "$(realpath %)")" python3 -i -c 'from %:t:r import *'<Enter>
 " Run the file, assuming it's executable. Try running it in python otherwise.
 " nnoremap <F5> :!cd $(dirname "%:p"); python3 -m %:t:r<Enter>
 " Use this version for ANY executable:
 nnoremap <silent> <F5> :w<CR>:!clear; %:p<Enter>
 inoremap <F5> <Esc>:w<CR>:!clear; %:p<Enter>
 " Run the file assuming it's a bunch of unittests
-nnoremap <F6> :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
+nnoremap <F6> :!clear; python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
 nnoremap <F7> :!clear; python3 -m doctest "%:p" && %:p<Enter>
 " Run flake8 check on the file.
 nnoremap <F8> :!cd $(dirname "%:p");autopep8 -d $(basename "%:p")<Enter>
@@ -72,11 +76,11 @@ nmap <leader>e :e **/
 "\p to toggle paste mode
 nnoremap <leader>p :set invnumber<Enter><F2>
 " \i to run a python file interactively
-nnoremap <leader>i :!cd $(dirname "%:p"); python3 -i -c 'from %:t:r import *'<Enter>
+nnoremap <leader>i :!PYTHONPATH="$(dirname "$(realpath %)")" python3 -i -c 'from %:t:r import *'<Enter>
 " \x to just save and execute a file
 nnoremap <silent> <leader>x :w<CR>:!clear; %:p<Enter>
 " \u To run python unittests for the current file
-nnoremap <leader>u :!python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
+nnoremap <leader>u :!clear; python3 -m unittest discover -v -s "%:p:h" -p "%:t"<Enter>
 " \d To run doctests on the current python file
 nnoremap <leader>d :!clear; python3 -m doctest "%:p" && %:p<Enter>
 " \j To pretty-print whatever JSON data is open
@@ -112,8 +116,6 @@ command! -range=% RUNLINES :<line1>,<line2>!python3
 command EVIMRC :e $HOME/.vimrc
 command SOVIMRC :so $HOME/.vimrc
 command! -range=% JSONTIDY :<line1>,<line2>!python3 -m json.tool --sort-keys
-" Render a .dot file. Requires graphviz
-command DotRender !dot -Tpng % > %:r.png
 " Convert a .csv to a .sql dump. Requires sqlite3
 command CSV2SQL :%!sqlite3 -csv ':memory:' '.import /dev/stdin %:t:r' '.mode column' '.dump'
 set visualbell
