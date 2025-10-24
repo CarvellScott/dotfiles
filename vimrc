@@ -89,6 +89,8 @@ nnoremap <leader>j :%!python3 -m json.tool --sort-keys<Enter>"
 nnoremap <leader>l :ls<CR>:b<space>
 " \c To fly between quickfix list entries
 nnoremap <leader>c :clist<CR>:cc<space>
+" \y To make yanking to clipboard a bit simpler
+vnoremap <leader>y :w !xclip<CR>
 map z1 :set foldlevel=0<CR><Esc>
 map z2 :set foldlevel=1<CR><Esc>
 map z3 :set foldlevel=2<CR><Esc>

@@ -20,6 +20,7 @@ write_files:
 # TODO: include fzf here once Debian distributes 0.48.0 or higher.
 packages: [
   entr,
+  #graphviz, # I prefer self-contained packages, but this is still useful sometimes.
   pandoc,
   parallel,
   podman,
