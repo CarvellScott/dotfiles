@@ -27,6 +27,11 @@ hi VertSplit cterm=none ctermfg=none ctermbg=none
 
 let python_highlight_all=1
 syntax on
+au BufNewFile,BufRead *.html set tabstop=2
+au BufNewFile,BufRead *.html set softtabstop=2
+au BufNewFile,BufRead *.html set shiftwidth=2
+au BufNewFile,BufRead *.html set expandtab
+
 au BufNewFile,BufRead *.py set tabstop=4
 au BufNewFile,BufRead *.py set softtabstop=4
 au BufNewFile,BufRead *.py set shiftwidth=4
