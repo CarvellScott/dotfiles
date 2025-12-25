@@ -46,6 +46,7 @@ au BufNewFile,BufRead *.py set keywordprg=/usr/bin/env\ -S\ python3\ -m\ pydoc
 au BufNewFile,BufRead *.py set makeef=/dev/null
 
 au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
+au BufNewFile *.recipe.md 0r ~/.vim/templates/skeleton.recipe.md
 au BufNewFile,BufRead *.mcmeta set filetype=json
 au BufNewFile pyproject.toml 0r ~/.vim/templates/skeleton.pyproject.toml
 au BufNewFile,BufRead pyproject.toml set keywordprg=$HOME/dotfiles/bin/halp.py\ 'https://packaging.python.org/en/latest/guides/writing-pyproject-toml/\\#'
