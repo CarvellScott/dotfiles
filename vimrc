@@ -14,6 +14,7 @@ set expandtab
 set encoding=utf-8
 set incsearch
 set hlsearch
+set smartcase
 set tags=./tags;
 set pastetoggle=<F2>
 " show line numbers
@@ -22,11 +23,22 @@ set number
 set clipboard=unnamedplus
 " Make vertical splits look good at least
 set fillchars+=vert:│
-set wildignore+=*.pyc
 hi VertSplit cterm=none ctermfg=none ctermbg=none
+set wildignore+=*.pyc
 
 let python_highlight_all=1
 syntax on
+
+" Rarely have swap files actually been useful for me. I have git for backups...
+set noswapfile
+" ..but persistent undo is pretty cool. (Note: The undo dir must be manually created)
+set undofile
+set undodir=$HOME/.vim/undo
+set undolevels=1000
+set undoreload=10000
+" Return to last edit position when opening files (also cool)
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
 au BufNewFile,BufRead *.html set tabstop=2
 au BufNewFile,BufRead *.html set softtabstop=2
 au BufNewFile,BufRead *.html set shiftwidth=2
@@ -43,6 +55,9 @@ au BufNewFile,BufRead tags set fileencoding=utf-8
 au BufNewFile,BufRead *.py set foldmethod=indent
 au BufNewFile,BufRead *.py set foldlevel=99
 au BufNewFile,BufRead *.py set keywordprg=/usr/bin/env\ -S\ python3\ -m\ pydoc
+" I should figure out what to do for makeprg. It needs to be something that
+" outputs the quickfix format.
+" In the meantime this lets me use make without messing up the quickfix list
 au BufNewFile,BufRead *.py set makeef=/dev/null
 
 au BufNewFile *.py 0r ~/.vim/templates/skeleton.py
@@ -53,6 +68,10 @@ au BufNewFile,BufRead pyproject.toml set keywordprg=$HOME/dotfiles/bin/halp.py\ 
 au BufWritePost *.vimrc :so %
 au BufNewFile,BufRead *.dockerfile set filetype=dockerfile
 
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+    set grepformat=%f:%l:%c:%m
+endif
 " Render a .dot file. Requires graphviz
 command DotRender !dot -Tsvg % > %:t:r.svg
 au BufWritePost *.dot :DotRender
@@ -107,7 +126,8 @@ map z7 :set foldlevel=6<CR><Esc>
 map z8 :set foldlevel=7<CR><Esc>
 map z9 :set foldlevel=8<CR><Esc>
 map z0 :set foldlevel=9<CR><Esc>
-
+" \s to spellcheck
+map <leader>s :setlocal spell spelllang=en_us<cr>
 " NOTE: This doesn't actually seem to work
 map <ScrollWheelDown> :undo<CR>
 map <ScrollWheelUp> :redo<CR>
